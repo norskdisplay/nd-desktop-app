@@ -1,7 +1,7 @@
 {
-  "name": "electron-quick-start-typescript",
+  "name": "nd-desktop-app",
   "version": "1.0.0",
-  "description": "A minimal Electron application written with Typescript",
+  "description": "A simple desktop app built with Electron",
   "scripts": {
     "dev:web": "es-dev-server --app-index index.html --node-resolve --watch --open",
     "serve": "es-dev-server --app-index build/index.html --open",
@@ -13,17 +13,9 @@
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "npm run build && electron ./dist/main.js"
   },
-  "repository": "https://github.com/electron/electron-quick-start-typescript",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo",
-    "typescript"
-  ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "repository": "https://github.com/SigurdMW/nd-desktop-appt",
+  "keywords": [],
+  "author": "Sigurd Moland Wahl",
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
