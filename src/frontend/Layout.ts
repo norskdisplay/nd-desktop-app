@@ -1,4 +1,4 @@
-import { customElement, html, property, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, WithoutShadowRoot } from './WithoutShadowRoot';
 
 @customElement('nd-layout')
 export class Layout extends WithoutShadowRoot {
@@ -17,8 +17,7 @@ export class Layout extends WithoutShadowRoot {
 				</div>
 			
 				<!--Main-->
-				<div class="container pt-24 md:pt-48 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-					some content
+				<div class="container pt-24 md:pt-48 px-6 mx-auto flex flex-wrap flex-col items-center">
 					<my-element></my-element>
 				</div>
 			</div>

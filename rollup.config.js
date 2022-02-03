@@ -65,7 +65,7 @@ const configs = [
 			sourcemap: true
 		},
 		plugins: [typescript({
-			tsconfig: "./tsconfig-frontend.json"
+			tsconfig: "./tsconfig.frontend.json"
 		}), minifyHTML(), babel(babelConfig), resolve(), copy(copyConfig)],
 	},
 	{
@@ -75,7 +75,7 @@ const configs = [
 			format: 'iife',
 		},
 		plugins: [typescript({
-			tsconfig: "./tsconfig-frontend.json"
+			tsconfig: "./tsconfig.frontend.json"
 		}), commonjs({ include: ['node_modules/**'] }), resolve()],
 	},
 ];

@@ -2,21 +2,29 @@
   "name": "nd-desktop-app",
   "version": "1.0.0",
   "description": "A simple desktop app built with Electron",
+  "main": "dist/main.js",
   "scripts": {
     "dev:web": "es-dev-server --app-index index.html --node-resolve --watch --open",
     "serve": "es-dev-server --app-index build/index.html --open",
     "build:webcomponents": "rimraf build && rollup -c",
-    "build": "tsc --project ./tsconfig-electron.json",
-    "dev": "concurrently \"npm:watch:styles\" \"npm:watch\" \"npm:start\"",
+    "build": "tsc --project ./tsconfig.electron.json",
+    "dev": "concurrently \"npm:watch:styles\" \"npm:dev:web\"",
     "watch:styles": "npx tailwindcss -i ./src/style.css -o ./dist/style.css --watch",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
-    "start": "npm run build && electron ./dist/main.js"
+    "start": "npm run build && electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "repository": "https://github.com/SigurdMW/nd-desktop-appt",
   "keywords": [],
   "author": "Sigurd Moland Wahl",
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.63",
+    "@electron-forge/maker-deb": "^6.0.0-beta.63",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
+    "@electron-forge/maker-zip": "^6.0.0-beta.63",
     "@rollup/plugin-typescript": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
@@ -24,6 +32,7 @@
     "electron": "^16.0.8",
     "es-dev-server": "^1.47.0",
     "eslint": "^7.32.0",
+    "eslint-plugin-lit": "^1.6.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.7.6",
     "rollup-plugin-babel": "^4.4.0",
@@ -39,8 +48,36 @@
     "@babel/runtime": "^7.9.6",
     "@webcomponents/template": "^1.4.2",
     "core-js": "^3.6.5",
+    "electron-squirrel-startup": "^1.0.0",
     "lit": "^2.1.2",
     "lit-html": "^2.1.2",
     "regenerator-runtime": "^0.13.5"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "nd_desktop_app"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }

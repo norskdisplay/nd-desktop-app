@@ -6,8 +6,8 @@ export class MyElement extends WithoutShadowRoot {
 	name = 'World';
 	render() {
 		return html`
-		  <h1>Hello, ${this.name}!</h1>
-		  <slot></slot>
+			<h1>Hello, ${this.name}!</h1>
+			<slot></slot>
 		`;
 	}
 }
