@@ -12,7 +12,7 @@
     "build": "tsc --project ./tsconfig.electron.json && npm run build:webcomponents && npm run build:styles",
     "dev": "concurrently \"npm:watch:styles\" \"npm:dev:web\"",
     "watch:styles": "npx tailwindcss -i ./src/style.css -o ./dist/style.css --watch",
-	"build:styles": "npx tailwindcss -i ./src/style.css -o ./dist/style.css",
+    "build:styles": "npx tailwindcss -i ./src/style.css -o ./dist/style.css",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "npm run build && electron-forge start",
@@ -20,7 +20,7 @@
     "make": "electron-forge make",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-	"postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": "https://github.com/SigurdMW/nd-desktop-appt",
   "keywords": [],
@@ -50,18 +50,17 @@
     "rollup-plugin-minify-html-literals": "^1.2.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.3.0",
-    "tailwindcss": "^3.0.18",
+    "tailwindcss": "^3.0.19",
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@babel/runtime": "^7.9.6",
+    "@babel/runtime": "^7.17.0",
     "@webcomponents/template": "^1.4.2",
-    "core-js": "^3.6.5",
     "electron-squirrel-startup": "^1.0.0",
-    "lit": "^2.1.2",
-    "lit-html": "^2.1.2",
+    "lit": "^2.1.3",
+    "lit-html": "^2.1.3",
     "regenerator-runtime": "^0.13.5",
-    "serialport": "^10.2.2"
+    "serialport": "10.2.2"
   },
   "config": {
     "forge": {
@@ -91,20 +90,20 @@
     }
   },
   "build": {
-	"asar": false,
+    "asar": false,
     "appId": "com.electron.norskdisplayapp",
     "productName": "Norsk Display",
     "win": {
       "target": "nsis",
       "icon": "static/favivon.ico"
     },
-	"files": [
-		"./dist/**/*",
-		"./index.html"
-	],
-	"extraMetadata": {
-		"main": "dist/main.js"
-	},
-	"extends": null
+    "files": [
+      "./dist/**/*",
+      "./index.html"
+    ],
+    "extraMetadata": {
+      "main": "dist/main.js"
+    },
+    "extends": null
   }
 }

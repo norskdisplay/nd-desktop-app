@@ -31,7 +31,6 @@ class SerialPort {
 	}
 
 	public async close() {
-		console.log("running close")
 		this.reset()
 		await this.serialConnection.disconnect()
 		this.serialConnection = null

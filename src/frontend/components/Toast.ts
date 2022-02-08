@@ -1,5 +1,4 @@
-import { property } from 'lit/decorators';
-import { customElement, html, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, property, WithoutShadowRoot } from './WithoutShadowRoot';
 
 @customElement('nd-toast')
 export class Toast extends WithoutShadowRoot {
