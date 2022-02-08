@@ -1,4 +1,4 @@
-import { customElement, html, property, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, WithoutShadowRoot } from './WithoutShadowRoot';
 
 @customElement('nd-layout')
 export class Layout extends WithoutShadowRoot {
@@ -6,7 +6,7 @@ export class Layout extends WithoutShadowRoot {
 		return html`
 			<div class="h-screen pb-14 bg-right bg-cover"">
 				<!--Nav-->
-				<div class="w-full container mx-auto p-6">
+				<div class="w-full container mx-auto p-6 fixed">
 						
 					<div class="w-full flex items-center justify-between">
 						<div class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"> 
@@ -17,9 +17,8 @@ export class Layout extends WithoutShadowRoot {
 				</div>
 			
 				<!--Main-->
-				<div class="container pt-24 md:pt-48 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-					some content
-					<my-element></my-element>
+				<div class="container h-full px-6 mx-auto flex flex-wrap flex-col items-center justify-center">
+					<nd-display-input />
 				</div>
 			</div>
 		`;

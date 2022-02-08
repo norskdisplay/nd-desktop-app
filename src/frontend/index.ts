@@ -1,2 +1,1 @@
-export * from "./Layout"
-export * from "./MyElement"
+export * from "./components"

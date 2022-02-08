@@ -11,6 +11,7 @@
     }
   },
   "include": [
-    "src/frontend/**/*"
+    "src/frontend/**/*",
+	"src/globals.d.ts"
   ]
 }

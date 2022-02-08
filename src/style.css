@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+nd-display-input {
+	width: 100%;
+}
+
+.min-height-50 {
+	min-height: 50px;
+}
+
+.nd-preview-text {
+	top: -10px;
+	left: 10px;
+	font-size: 0.8em;
+	background-color: #fff;
+	padding: 0 5px;
+}
