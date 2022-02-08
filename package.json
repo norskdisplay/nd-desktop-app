@@ -5,16 +5,22 @@
   "main": "dist/main.js",
   "scripts": {
     "dev:web": "es-dev-server --app-index index.html --node-resolve --watch --open",
-    "serve": "es-dev-server --app-index build/index.html --open",
+    "serve": "concurrently \"npm:dev:web\" \"npm:watch:styles\" \"npm:watch:webcomponents\"",
+    "watch:componentstyles": "concurrently \"npm:watch:styles\" \"npm:watch:webcomponents\"",
     "build:webcomponents": "rimraf build && rollup -c",
-    "build": "tsc --project ./tsconfig.electron.json",
+    "watch:webcomponents": "rollup -c --watch",
+    "build": "tsc --project ./tsconfig.electron.json && npm run build:webcomponents && npm run build:styles",
     "dev": "concurrently \"npm:watch:styles\" \"npm:dev:web\"",
     "watch:styles": "npx tailwindcss -i ./src/style.css -o ./dist/style.css --watch",
+	"build:styles": "npx tailwindcss -i ./src/style.css -o ./dist/style.css",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "npm run build && electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+	"postinstall": "electron-builder install-app-deps"
   },
   "repository": "https://github.com/SigurdMW/nd-desktop-appt",
   "keywords": [],
@@ -26,10 +32,13 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
     "@rollup/plugin-typescript": "^8.3.0",
+    "@types/serialport": "^8.0.2",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "concurrently": "^7.0.0",
     "electron": "^16.0.8",
+    "electron-builder": "^22.14.13",
+    "electron-rebuild": "^3.2.7",
     "es-dev-server": "^1.47.0",
     "eslint": "^7.32.0",
     "eslint-plugin-lit": "^1.6.1",
@@ -51,7 +60,8 @@
     "electron-squirrel-startup": "^1.0.0",
     "lit": "^2.1.2",
     "lit-html": "^2.1.2",
-    "regenerator-runtime": "^0.13.5"
+    "regenerator-runtime": "^0.13.5",
+    "serialport": "^10.2.2"
   },
   "config": {
     "forge": {
@@ -79,5 +89,22 @@
         }
       ]
     }
+  },
+  "build": {
+	"asar": false,
+    "appId": "com.electron.norskdisplayapp",
+    "productName": "Norsk Display",
+    "win": {
+      "target": "nsis",
+      "icon": "static/favivon.ico"
+    },
+	"files": [
+		"./dist/**/*",
+		"./index.html"
+	],
+	"extraMetadata": {
+		"main": "dist/main.js"
+	},
+	"extends": null
   }
 }

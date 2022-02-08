@@ -4,3 +4,7 @@
 // nodeIntegration is set to true in webPreferences.
 // Use preload.js to selectively enable features
 // needed in the renderer process.
+(async () => {
+	const result = await window.ipcRenderer.invoke('get-available-serial-ports')
+	window.availablePorts = result
+})()

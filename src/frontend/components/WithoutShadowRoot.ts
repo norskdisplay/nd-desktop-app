@@ -7,4 +7,4 @@ export class WithoutShadowRoot extends LitElement {
 }
 
 export * from "lit"
-export { customElement, property } from 'lit/decorators.js';
+export { customElement, property, state } from 'lit/decorators.js';

@@ -50,9 +50,10 @@ const terserConfig = {
 	},
 };
 
+// If issues with template, revert to copy the whole folder node_modules/@webcomponents
 const copyConfig = {
 	targets: [
-		{ src: 'node_modules/@webcomponents', dest: 'dist/node_modules' }
+		{ src: 'node_modules/@webcomponents/template/template.js', dest: 'dist/' }
 	],
 };
 
@@ -62,7 +63,8 @@ const configs = [
 		output: {
 			file: 'dist/bundle.js',
 			format: 'iife',
-			sourcemap: true
+			sourcemap: true,
+			name: "bundle"
 		},
 		plugins: [typescript({
 			tsconfig: "./tsconfig.frontend.json"
@@ -73,6 +75,7 @@ const configs = [
 		output: {
 			file: 'dist/polyfills.js',
 			format: 'iife',
+			sourcemap: true
 		},
 		plugins: [typescript({
 			tsconfig: "./tsconfig.frontend.json"
