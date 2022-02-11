@@ -3,7 +3,7 @@
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint",
-	"plugin:lit/recommended"
+	"eslint-plugin-lit/lib"
   ],
   "extends": [
     "eslint:recommended",
