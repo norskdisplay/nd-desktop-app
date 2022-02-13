@@ -46,10 +46,11 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
-	"electron-squirrel-startup": "^1.0.0",
+    "electron-squirrel-startup": "^1.0.0",
     "lit": "^2.1.3",
     "lit-html": "^2.1.3",
-    "serialport": "10.2.2"
+    "serialport": "10.2.2",
+    "update-electron-app": "^2.0.1"
   },
   "config": {
     "forge": {

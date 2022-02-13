@@ -2,6 +2,8 @@ import { app, BrowserWindow, ipcMain, shell } from "electron";
 import * as path from "path";
 import { serialPort } from "./SerialPort";
 import { URL } from "url"
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require("update-electron-app")()
 
 /**
 "TypeError: Cannot read property 'indexOf' of undefined": 
