@@ -10,11 +10,18 @@ require("update-electron-app")()
 https://stackoverflow.com/questions/59231294/typeerror-cannot-read-property-indexof-of-undefined-raised-when-using-packa
  */
 
+// Handle creating/removing shortcuts on Windows when installing/uninstalling.
+if (require('electron-squirrel-startup')) {
+	// eslint-disable-line global-require
+	app.quit();
+}
+
+
 function createWindow() {
 	const mainWindow = new BrowserWindow({
 		frame: true,
 		// titleBarStyle: 'hidden',
-  		// titleBarOverlay: true,
+		// titleBarOverlay: true,
 		//   movable: true,
 		resizable: true,
 		center: true,
