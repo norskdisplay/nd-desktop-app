@@ -5,6 +5,7 @@
     "@typescript-eslint",
 	"eslint-plugin-lit/lib"
   ],
+  "ignorePatterns": ["scripts/**/*"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",

@@ -5,7 +5,7 @@ import { customElement, html, property, state, WithoutShadowRoot } from './Witho
 @customElement('nd-display-input')
 export class DisplayInput extends WithoutShadowRoot {
 	@property({ type: Boolean })
-  	show = false;
+	show = false;
 	@state()
 	inputText = ""
 
@@ -22,8 +22,8 @@ export class DisplayInput extends WithoutShadowRoot {
 		document.addEventListener('selected-port', this.handePortChange)
 	}
 
-	private handePortChange = (e: CustomEvent) => {
-		this.port = e.detail.port
+	private handePortChange = (e: Event) => {
+		this.port = (e as CustomEvent).detail.port
 	}
 
 	private handleInput = (e: InputEvent) => {

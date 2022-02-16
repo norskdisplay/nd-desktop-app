@@ -1,16 +1,17 @@
 import { property, state } from 'lit/decorators';
 import { AvailabePort } from '../../globals';
+import { isHTMLInputElement } from '../utils/isHTMLElement';
 import { customElement, html, WithoutShadowRoot } from './WithoutShadowRoot';
 
 @customElement('nd-select-serial-port')
 export class SelectSerialPort extends WithoutShadowRoot {
-	@property()
+	@property({ type: Array })
 	availablePorts: AvailabePort[] = []
 
 	@state()
 	error = ""
 
-	intervalRef: NodeJS.Timeout
+	intervalRef: NodeJS.Timeout | null = null
 	connectedCallback() {
 		super.connectedCallback()
 		this.getAvailablePorts()
@@ -39,10 +40,11 @@ export class SelectSerialPort extends WithoutShadowRoot {
 		}, 10000)
 	}
 	private handleChange = async (e: InputEvent) => {
-		window.ipcRenderer.invoke("set-choosen-serial-port", (e.target as any).value)
+		if (!isHTMLInputElement(e.target)) return
+		window.ipcRenderer.invoke("set-choosen-serial-port", e.target.value)
 		document.dispatchEvent(new CustomEvent('selected-port', {
 			detail: {
-				port: (e.target as any).value
+				port: e.target.value
 			}
 		}))
 	}

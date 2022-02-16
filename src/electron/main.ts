@@ -2,6 +2,8 @@ import { app, BrowserWindow, ipcMain, shell } from "electron";
 import * as path from "path";
 import { serialPort } from "./SerialPort";
 import { URL } from "url"
+import { config } from "./ConfigService";
+import { logger } from "./Logger";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require("update-electron-app")()
 
@@ -9,6 +11,8 @@ require("update-electron-app")()
 "TypeError: Cannot read property 'indexOf' of undefined": 
 https://stackoverflow.com/questions/59231294/typeerror-cannot-read-property-indexof-of-undefined-raised-when-using-packa
  */
+
+const isDevMode = !app.isPackaged
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -35,10 +39,12 @@ function createWindow() {
 	});
 	mainWindow.removeMenu()
 	mainWindow.loadFile(path.join(__dirname, "../index.html"));
-	mainWindow.webContents.openDevTools()
+	if (isDevMode) {
+		mainWindow.webContents.openDevTools()
+	}
 }
 
-ipcMain.handle('get-available-serial-ports', async (event, ...args) => {
+ipcMain.handle('get-available-serial-ports', async () => {
 	const result = await serialPort.getAvailablePorts()
 	return result
 })
@@ -47,11 +53,16 @@ ipcMain.handle('set-choosen-serial-port', async (event, port: string) => {
 	return await serialPort.handleSelectPort(port)
 })
 
+ipcMain.handle('get-config', () => {
+	return config.getConfig()
+})
+
 ipcMain.handle('send-text-serial-port', (event, text: string) => {
 	serialPort.writeInterval(text)
 })
 
-app.on("ready", () => {
+app.on("ready", async () => {
+	await config.loadConfig()
 	createWindow();
 	
 	app.on("activate", function () {
@@ -60,6 +71,17 @@ app.on("ready", () => {
 		if (BrowserWindow.getAllWindows().length === 0) createWindow();
 	});
 });
+
+process.on("uncaughtException", (error: string | object | Error) => {
+	logger.error(error)
+	process.exit(1)
+})
+
+process.on("unhandledRejection", (reason: string | object | Error) => {
+	logger.error(reason)
+	throw reason // will end up in uncaughtException
+})
+
 
 // For security reasons, allow only navigate to norsk display
 // ref https://www.electronjs.org/docs/latest/tutorial/security#13-disable-or-limit-navigation

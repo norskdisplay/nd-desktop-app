@@ -2,10 +2,13 @@
   "compilerOptions": {
     "module": "ESNext",
     "noImplicitAny": true,
+	"strict": true,
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",
 	"experimentalDecorators": true,
+	"rootDir": "./src/frontend",
+	"moduleResolution": "Node",
     "paths": {
       "*": ["node_modules/*"]
     }

@@ -3,7 +3,7 @@ import { customElement, html, property, WithoutShadowRoot } from './WithoutShado
 @customElement('nd-modal')
 export class Modal extends WithoutShadowRoot {
 	@property({ type: Boolean })
-  	show = false;
+	show = false;
 	private close() {
 		this.show = false
 	}

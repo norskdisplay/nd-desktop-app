@@ -1,5 +1,6 @@
 import { AvailabePort } from "../globals"
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const RequiredSerialPort = require("serialport")
 
 const SerialPort = "list" in RequiredSerialPort ? RequiredSerialPort : RequiredSerialPort.SerialPort

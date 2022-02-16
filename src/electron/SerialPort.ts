@@ -1,7 +1,9 @@
+import { logger } from "./Logger"
 import { SerialPortController } from "./SerialPortController"
 
 class SerialPort {
-	intervalRef: NodeJS.Timeout
+	intervalRef: NodeJS.Timeout | null = null
+	availablePortsIntervalRef: NodeJS.Timeout | null = null
 	writeFailedCount = 0
 	serialConnection: SerialPortController | null = null
 	
@@ -13,8 +15,16 @@ class SerialPort {
 			}
 			return ports
 		} catch (e) {
+			const message = e instanceof Error ? e.message : "No error message provided"
+			logger.error("Failed to get ports: " + message)
 			return []
 		}
+	}
+
+	public checkAvailablePorts() {
+		this.availablePortsIntervalRef = setInterval(() => {
+			const ports = this.getAvailablePorts()
+		}, 1000)
 	}
 
 	async handleSelectPort(port: string) {
@@ -32,8 +42,10 @@ class SerialPort {
 
 	public async close() {
 		this.reset()
-		await this.serialConnection.disconnect()
-		this.serialConnection = null
+		if (this.serialConnection) {
+			await this.serialConnection.disconnect()
+			this.serialConnection = null
+		}
 	}
 
 	private reset() {
@@ -45,6 +57,9 @@ class SerialPort {
 
 	async write(text: string) {
 		try {
+			if (!this.serialConnection) {
+				throw new Error("No serial connection instance exist")
+			}
 			await this.serialConnection.write(text)
 		} catch (e) {
 			this.writeFailedCount += 1
@@ -54,7 +69,7 @@ class SerialPort {
 		}
 	}
 	
-	writeInterval = async (text: string, ms: number = 10) => {
+	writeInterval = async (text: string, ms = 10) => {
 		this.intervalRef = setInterval(() => {
 			this.write(text)
 		}, ms)
