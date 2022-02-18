@@ -17,3 +17,7 @@ nd-display-input {
 	background-color: #fff;
 	padding: 0 5px;
 }
+
+.min-w-12em {
+	min-width: 12em;
+}
