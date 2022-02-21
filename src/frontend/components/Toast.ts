@@ -1,17 +1,18 @@
+import { closeToastEvent } from '../customEvents/toast';
 import { customElement, html, property, WithoutShadowRoot } from './WithoutShadowRoot';
 
 @customElement('nd-toast')
 export class Toast extends WithoutShadowRoot {
-	@property({ type: Boolean })
-	show = false
+	@property({ type: String })
+	toastId = ""
+
 	@property({ type: String })
 	message = ""
 
-	private close() {
-		document.dispatchEvent(new Event('close-toast'))
+	private close = () => {
+		document.dispatchEvent(closeToastEvent(this.toastId))
 	}
 	render() {
-		if (!this.show) return null
 		return html`
 			<div class="fixed bottom-1 right-1 z-50 bg-red-600 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3" id="static-example" role="alert" aria-live="assertive" aria-atomic="true" data-mdb-autohide="false">
 				<div class="bg-red-600 flex justify-between items-center py-2 px-3 bg-clip-padding border-b border-red-500 rounded-t-lg">

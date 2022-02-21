@@ -1,9 +1,18 @@
-import { app, BrowserWindow, ipcMain, shell } from "electron";
+import { app, BrowserWindow, shell } from "electron";
 import * as path from "path";
 import { serialPort } from "./SerialPort";
 import { URL } from "url"
 import { config } from "./ConfigService";
 import { logger } from "./Logger";
+import { register } from "./ipcMain";
+
+try { // DOES IT WORK???? 🤔
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	require('electron-reloader')(module);
+} catch {
+	// Just catch the errors but do nothing
+}
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require("update-electron-app")()
 
@@ -19,7 +28,6 @@ if (require('electron-squirrel-startup')) {
 	// eslint-disable-line global-require
 	app.quit();
 }
-
 
 function createWindow() {
 	const mainWindow = new BrowserWindow({
@@ -37,29 +45,15 @@ function createWindow() {
 			sandbox: true
 		}
 	});
-	mainWindow.removeMenu()
-	mainWindow.loadFile(path.join(__dirname, "../index.html"));
+	if (!isDevMode) {
+		mainWindow.removeMenu()
+	}
+	mainWindow.loadFile(path.join(__dirname, "../../index.html"));
 	if (isDevMode) {
 		mainWindow.webContents.openDevTools()
 	}
+	register(mainWindow)	
 }
-
-ipcMain.handle('get-available-serial-ports', async () => {
-	const result = await serialPort.getAvailablePorts()
-	return result
-})
-
-ipcMain.handle('set-choosen-serial-port', async (event, port: string) => {
-	return await serialPort.handleSelectPort(port)
-})
-
-ipcMain.handle('get-config', () => {
-	return config.getConfig()
-})
-
-ipcMain.handle('send-text-serial-port', (event, text: string) => {
-	serialPort.writeInterval(text)
-})
 
 app.on("ready", async () => {
 	await config.loadConfig()

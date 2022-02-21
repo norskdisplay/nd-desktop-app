@@ -1,14 +1,14 @@
-import { Config } from './../configSchema';
+import { LoadConfigResponse } from './../types/LoadConfigResponse';
+import { Config, configSchema } from './../configSchema';
 import { load, dump } from "js-yaml"
 import { readFile, writeFile, access } from "fs/promises"
-import { resolve } from "path"
 import { logger } from "./Logger"
 import { defaultConfig } from "./defaultConfig"
-import { app } from "electron"
+import { getConfigFilePath } from './utils/getConfigFilePath';
 
 class ConfigService {
 	lastConfig: Config | null = null
-	configFilePath = resolve(app.getPath("userData"), "config.yml")
+	configFilePath = getConfigFilePath()
 
 	public async getConfig() {
 		if (this.lastConfig === null) {
@@ -61,8 +61,43 @@ class ConfigService {
 	}
 	private async writeConfig(c: Config){
 		this.lastConfig = c
-		const fileContent = dump(c)
-		await writeFile(this.configFilePath, fileContent, "utf-8")
+		const resp = await this.writeCurrentConfigTo(this.configFilePath)
+		return 	resp
+	}
+
+	public async loadConfigFrom(source: string): Promise<LoadConfigResponse> {
+		try {
+			const rawConfig = await readFile(source, "utf-8")
+			const config = load(rawConfig) as Config
+			const validation = configSchema.safeParse(config)
+			if (!validation.success) {
+				return {
+					type: "validationerror",
+					data: validation.error.issues
+				}
+			}
+			this.writeConfig(config)
+			return {
+				type: "success",
+				message: "Successfully written to file"
+			}
+			
+		} catch (e: unknown) {
+			return {
+				type: "error",
+				message: e instanceof Error ? e.message : "Something went wrong"
+			}
+		}
+	}
+
+	public async writeCurrentConfigTo(dest: string) {
+		const fileContent = dump(this.lastConfig)
+		await writeFile(dest, fileContent, "utf-8")
+		return {
+			dest, 
+			content: fileContent,
+			config: this.lastConfig
+		}
 	}
 }
 

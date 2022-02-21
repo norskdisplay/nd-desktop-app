@@ -12,13 +12,14 @@ export class Layout extends WithoutShadowRoot {
 							<img class="h-8 fill-current text-indigo-600 pr-2" src="./static/logo.svg" alt="Norsk Display logo" />
 						</div>				
 					</div>
-					<nd-config-manager></nd-config-manager>
+					<nd-settings-dropdown></nd-settings-dropdown>
 				</div>
 			
 				<!--Main-->
 				<div class="container px-6 mx-auto flex flex-wrap flex-col items-center justify-center flex-grow">
 					<nd-display-input />
 				</div>
+				<nd-toast-manger></nd-toast-manger>
 			</div>
 		`;
 	}

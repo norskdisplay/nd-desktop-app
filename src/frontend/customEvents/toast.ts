@@ -1,0 +1,1 @@
+export const closeToastEvent = (toastId: string) => new CustomEvent('close-toast', { detail: toastId })
