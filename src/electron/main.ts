@@ -4,7 +4,7 @@ import { serialPort } from "./SerialPort";
 import { URL } from "url"
 import { config } from "./ConfigService";
 import { logger } from "./Logger";
-import { register } from "./ipcMain";
+import { registerIpc } from "./ipcMain";
 
 try { // DOES IT WORK???? 🤔
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -52,7 +52,7 @@ function createWindow() {
 	if (isDevMode) {
 		mainWindow.webContents.openDevTools()
 	}
-	register(mainWindow)	
+	registerIpc(mainWindow)	
 }
 
 app.on("ready", async () => {

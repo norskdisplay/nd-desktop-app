@@ -44,7 +44,9 @@ export class ToastManger extends WithoutShadowRoot {
 	}
 	render() {
 		return html`
-			${this.toasts.map((toast) => html`<nd-toast message=${toast.message} toastId=${toast.id} type=${toast.type}></nd-toast>`)}
+			<div class="fixed bottom-1 right-1 z-50">
+				${this.toasts.map((toast) => html`<nd-toast message=${toast.message} toastId=${toast.id} type=${toast.type}></nd-toast>`)}
+			</div>
 		`;
 	}
 }

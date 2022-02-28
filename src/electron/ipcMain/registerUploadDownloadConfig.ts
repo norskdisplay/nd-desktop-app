@@ -25,10 +25,10 @@ export const registerUploadDownloadConfig: RegisterIpc = (ipcMain, mainWindow) =
 				}
 			}
 			logger.debug("Selected folder: " + filePaths.join(", "))
-			const path = await config.writeCurrentConfigTo(resolve(filePaths[0], configFileName));
+			const resp = await config.writeCurrentConfigTo(resolve(filePaths[0], configFileName));
 			return {
 				status: "success",
-				message: "File downloaded to " + path
+				message: "File downloaded to " + resp.dest
 			}
 		} catch (e: unknown) {
 			const isError = e instanceof Error

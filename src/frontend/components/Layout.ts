@@ -19,7 +19,7 @@ export class Layout extends WithoutShadowRoot {
 				<div class="container px-6 mx-auto flex flex-wrap flex-col items-center justify-center flex-grow">
 					<nd-display-input />
 				</div>
-				<nd-toast-manger></nd-toast-manger>
+				<nd-toast-manager></nd-toast-manager>
 				<nd-upload-error></nd-upload-error>
 			</div>
 		`;

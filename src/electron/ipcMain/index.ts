@@ -11,6 +11,6 @@ const toRegister: RegisterIpc[] = [
 	registerSerialPortCommunication
 ]
 
-export const register = (mainWindow: BrowserWindow) => {
+export const registerIpc = (mainWindow: BrowserWindow) => {
 	toRegister.forEach((r) => r(ipcMain, mainWindow))
 }

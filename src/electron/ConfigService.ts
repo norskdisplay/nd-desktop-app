@@ -62,7 +62,7 @@ class ConfigService {
 	private async writeConfig(c: Config){
 		this.lastConfig = c
 		const resp = await this.writeCurrentConfigTo(this.configFilePath)
-		return 	resp
+		return resp
 	}
 
 	public async loadConfigFrom(source: string): Promise<UploadConfigResponse> {
@@ -79,9 +79,8 @@ class ConfigService {
 			this.writeConfig(config)
 			return {
 				type: "success",
-				message: "Successfully written to file"
+				message: "Successfully loaded config from " + source + "."
 			}
-			
 		} catch (e: unknown) {
 			return {
 				type: "error",
