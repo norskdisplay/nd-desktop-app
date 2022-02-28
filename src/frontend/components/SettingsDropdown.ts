@@ -1,3 +1,5 @@
+import { UploadConfigResponse } from './../../types/LoadConfigResponse';
+import { showModalEvent, showToastEvent } from '../customEvents/toast';
 import { isHTMLElement } from './../utils/isHTMLElement';
 import { customElement, html, state, WithoutShadowRoot } from './WithoutShadowRoot';
 
@@ -28,11 +30,17 @@ export class SettingsDropdown extends WithoutShadowRoot {
 	private download = () => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		window.ipcRenderer.invoke("download-config").then((m: any) => {
-			console.log(m)
 			if (m.status === "success") {
-				alert("success")
-			} else {
-				alert("Failure")				
+				document.dispatchEvent(showToastEvent({
+					type: "success",
+					message: m.message
+				}))
+			} 
+			if (m.status === "error") {
+				document.dispatchEvent(showToastEvent({
+					type: "error",
+					message: m.message
+				}))
 			}
 			this.close()
 		})
@@ -40,9 +48,20 @@ export class SettingsDropdown extends WithoutShadowRoot {
 
 	private upload = () => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		window.ipcRenderer.invoke("upload-config").then((m: any) => {
-			console.log(m)
-			alert(m.type)
+		window.ipcRenderer.invoke("upload-config").then((m: UploadConfigResponse) => {
+			if (m.type === "success" || m.type === "error") {
+				document.dispatchEvent(showToastEvent(m))
+			}
+			if (m.type === "validationerror") {
+				const issueString = m.data.map((issue) => {
+					return `<li><pre class="bg-slate-200 inline-block rounded px-0.5">${issue.path.join(".")}</pre> ${issue.message}</li>`
+				}).join("")
+				document.dispatchEvent(showModalEvent({
+					heading: "Validation errors in uploaded file",
+					body: `<p class="bg-red-600 text-white p-4 rounded-lg mb-4">Due to errors in the uploaded config file, the settings has not beed updated. Fix the following errors in the file and try again:</p><ul class="list-disc 
+					list-inside">${issueString}</ul>`
+				}))
+			}
 			this.close()
 		})
 	}

@@ -1,7 +1,7 @@
 import { Config } from './../configSchema';
 import { ZodError } from "zod";
 
-export type LoadConfigResponse = {
+export type UploadConfigResponse = {
 	type: "success",
 	message: string
 } | {

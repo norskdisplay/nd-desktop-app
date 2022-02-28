@@ -1,4 +1,4 @@
-import { LoadConfigResponse } from './../types/LoadConfigResponse';
+import { UploadConfigResponse } from './../types/LoadConfigResponse';
 import { Config, configSchema } from './../configSchema';
 import { load, dump } from "js-yaml"
 import { readFile, writeFile, access } from "fs/promises"
@@ -65,7 +65,7 @@ class ConfigService {
 		return 	resp
 	}
 
-	public async loadConfigFrom(source: string): Promise<LoadConfigResponse> {
+	public async loadConfigFrom(source: string): Promise<UploadConfigResponse> {
 		try {
 			const rawConfig = await readFile(source, "utf-8")
 			const config = load(rawConfig) as Config

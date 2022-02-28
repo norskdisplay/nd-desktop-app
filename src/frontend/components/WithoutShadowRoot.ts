@@ -8,3 +8,4 @@ export class WithoutShadowRoot extends LitElement {
 
 export * from "lit"
 export { customElement, property, state } from 'lit/decorators.js';
+export { unsafeHTML } from "lit/directives/unsafe-html"

@@ -1,4 +1,4 @@
-import { LoadConfigResponse } from './../../types/LoadConfigResponse';
+import { UploadConfigResponse } from './../../types/LoadConfigResponse';
 import { app, dialog } from "electron"
 import { RegisterIpc } from "./index"
 import { logger } from "../Logger"
@@ -6,8 +6,13 @@ import { config } from "../ConfigService"
 import { resolve } from "path"
 import { configFileName } from "../utils/getConfigFilePath"
 
+type DownloadResponse = {
+	status: "success" | "error" | "cancelled"
+	message?: string
+}
+
 export const registerUploadDownloadConfig: RegisterIpc = (ipcMain, mainWindow) => {
-	ipcMain.handle("download-config", async () => {
+	ipcMain.handle("download-config", async (): Promise<DownloadResponse> => {
 		logger.debug("Downloading config")
 		try {
 			const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
@@ -15,7 +20,9 @@ export const registerUploadDownloadConfig: RegisterIpc = (ipcMain, mainWindow) =
 				defaultPath: app.getPath("downloads")
 			})
 			if (canceled) {
-				return // TODO return reason
+				return {
+					status: "cancelled"
+				}
 			}
 			logger.debug("Selected folder: " + filePaths.join(", "))
 			const path = await config.writeCurrentConfigTo(resolve(filePaths[0], configFileName));
@@ -33,7 +40,7 @@ export const registerUploadDownloadConfig: RegisterIpc = (ipcMain, mainWindow) =
 		}
 	})
 
-	ipcMain.handle("upload-config", async (): Promise<LoadConfigResponse> => {
+	ipcMain.handle("upload-config", async (): Promise<UploadConfigResponse> => {
 		logger.debug("Upload config")
 		try {
 			const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {

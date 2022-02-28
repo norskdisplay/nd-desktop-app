@@ -7,7 +7,7 @@
     "outDir": "dist",
     "baseUrl": ".",
 	"experimentalDecorators": true,
-	"rootDir": "./src/frontend",
+	"rootDir": "./src",
 	"moduleResolution": "Node",
 	"importHelpers": true,
     "paths": {
@@ -16,6 +16,7 @@
   },
   "include": [
     "src/frontend/**/*",
-	"src/globals.d.ts"
+	"src/globals.d.ts",
+	"src/types/*"
   ]
 }

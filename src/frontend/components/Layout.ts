@@ -20,6 +20,7 @@ export class Layout extends WithoutShadowRoot {
 					<nd-display-input />
 				</div>
 				<nd-toast-manger></nd-toast-manger>
+				<nd-upload-error></nd-upload-error>
 			</div>
 		`;
 	}
