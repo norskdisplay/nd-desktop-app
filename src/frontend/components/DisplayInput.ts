@@ -1,9 +1,9 @@
 import { handleReplaceText } from './../utils/handleReplaceText';
 import { isHTMLInputElement } from '../utils/isHTMLElement';
-import { customElement, html, property, state, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, property, state, StyledBase } from './StyledBase';
 
 @customElement('nd-display-input')
-export class DisplayInput extends WithoutShadowRoot {
+export class DisplayInput extends StyledBase {
 	@property({ type: Boolean })
 	show = false;
 	@state()

@@ -1,7 +1,7 @@
-import { customElement, html, property, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, property, StyledBase } from './StyledBase';
 
 @customElement('nd-modal')
-export class Modal extends WithoutShadowRoot {
+export class Modal extends StyledBase {
 	@property({ type: Boolean })
 	show = false;
 	private close() {

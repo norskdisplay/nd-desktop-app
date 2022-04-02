@@ -1,8 +1,8 @@
 import { showModalEvent } from '../customEvents/toast';
-import { customElement, html, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, StyledBase } from './StyledBase';
 
 @customElement('nd-layout')
-export class Layout extends WithoutShadowRoot {
+export class Layout extends StyledBase {
 	connectedCallback(): void {
 		super.connectedCallback();
 			setTimeout(() => {
@@ -33,16 +33,18 @@ export class Layout extends WithoutShadowRoot {
 				<div class="container mx-auto p-6 flex">
 					<div class="w-full flex items-center justify-between">
 						<div class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"> 
-							<img class="h-8 fill-current text-indigo-600 pr-2" src="./static/logo.svg" alt="Norsk Display logo" />
+							<img class="h-8 fill-current text-indigo-600 pr-2" src="../static/logo.svg" alt="Norsk Display logo" />
 						</div>				
 					</div>
 					<nd-settings-dropdown></nd-settings-dropdown>
 				</div>
 			
 				<!--Main-->
-				<div class="container px-6 mx-auto flex flex-wrap flex-col items-center justify-center flex-grow">
-					<nd-display-input />
-					<nd-accordation text="hello">some contet</nd-accordation>
+				<div class="container px-6 mx-auto flex flex-wrap flex-col justify-center flex-grow">
+					<div class="flex justify-center mb-2 text-zinc-500">
+						Broadcasting on ${window.config.userSettings.port} with frequency 3 times per second
+						<button aria-label="Edit settings" title="Edit broadcast settings"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M18.414 2a.997.997 0 0 0-.707.293l-2 2-1.414 1.414L3 17v4h4L21.707 6.293a.999.999 0 0 0 0-1.414l-2.586-2.586A.997.997 0 0 0 18.414 2zm0 2.414 1.172 1.172-1.293 1.293-1.172-1.172 1.293-1.293zm-2.707 2.707 1.172 1.172L6.172 19H5v-1.172L15.707 7.121z"/></svg></button>
+					</div>
 					<nd-display-list></nd-display-list>
 				</div>
 				<nd-toast-manager></nd-toast-manager>

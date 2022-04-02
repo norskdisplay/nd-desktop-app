@@ -1,7 +1,7 @@
-import { customElement, html, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, StyledBase } from './StyledBase';
 
 @customElement('nd-help-text')
-export class HelpText extends WithoutShadowRoot {
+export class HelpText extends StyledBase {
 	render() {
 		return html`
 			<div class="mb-1">

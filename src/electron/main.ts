@@ -48,7 +48,7 @@ function createWindow() {
 	if (!isDevMode) {
 		mainWindow.removeMenu()
 	}
-	mainWindow.loadFile(path.join(__dirname, "../../index.html"));
+	mainWindow.loadFile(path.join(__dirname, "../../dist/index.html"));
 	if (isDevMode) {
 		mainWindow.webContents.openDevTools()
 	}

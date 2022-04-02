@@ -1,12 +1,8 @@
 import { property } from 'lit/decorators';
-import { customElement, html, WithoutShadowRoot, state, LitElement } from './WithoutShadowRoot';
+import { customElement, html, StyledBase, state } from './StyledBase';
 
 @customElement('nd-accordation')
-export class Accordation extends LitElement {
-	createRenderRoot() {
-		Object.keys(this).map((key) => console.log(key, (this as any)[key])); 
-		return this;
-	}
+export class Accordation extends StyledBase {
 	@property({ type: String })
 	text = ""
 	@state()

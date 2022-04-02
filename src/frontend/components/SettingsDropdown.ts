@@ -1,10 +1,10 @@
 import { UploadConfigResponse } from './../../types/LoadConfigResponse';
 import { showModalEvent, showToastEvent } from '../customEvents/toast';
 import { isHTMLElement } from './../utils/isHTMLElement';
-import { customElement, html, state, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, state, StyledBase } from './StyledBase';
 
 @customElement('nd-settings-dropdown')
-export class SettingsDropdown extends WithoutShadowRoot {
+export class SettingsDropdown extends StyledBase {
 	@state()
 	show = false
 

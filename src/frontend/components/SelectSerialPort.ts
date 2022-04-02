@@ -1,10 +1,10 @@
 import { property, state } from 'lit/decorators';
 import { AvailabePort } from '../../globals';
 import { isHTMLInputElement } from '../utils/isHTMLElement';
-import { customElement, html, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, StyledBase } from './StyledBase';
 
 @customElement('nd-select-serial-port')
-export class SelectSerialPort extends WithoutShadowRoot {
+export class SelectSerialPort extends StyledBase {
 	@property({ type: Array })
 	availablePorts: AvailabePort[] = []
 

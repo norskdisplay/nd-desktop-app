@@ -1,6 +1,6 @@
 import { closeToastEvent } from '../customEvents/toast';
 import { NewToast } from '../types/Toast';
-import { customElement, html, property, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, property, StyledBase } from './StyledBase';
 
 interface ThemeReturn {
 	background: string
@@ -9,7 +9,7 @@ interface ThemeReturn {
 }
 
 @customElement('nd-toast')
-export class Toast extends WithoutShadowRoot {
+export class Toast extends StyledBase {
 	@property({ type: String })
 	toastId = ""
 

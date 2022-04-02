@@ -1,8 +1,8 @@
 import { ExistingToast } from '../types/Toast';
-import { customElement, html, state, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, state, StyledBase } from './StyledBase';
 
 @customElement('nd-toast-manager')
-export class ToastManger extends WithoutShadowRoot {
+export class ToastManger extends StyledBase {
 	@state()
 	toasts: ExistingToast[] = []
 

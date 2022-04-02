@@ -1,8 +1,8 @@
 import { ShowModalEventDetail } from '../types/ShowToastEvetDetail';
-import { customElement, html, unsafeHTML, state, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, unsafeHTML, state, StyledBase } from './StyledBase';
 
 @customElement('nd-upload-error')
-export class ModalManger extends WithoutShadowRoot {
+export class ModalManger extends StyledBase {
 	@state()
 	show = false
 

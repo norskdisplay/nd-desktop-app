@@ -1,8 +1,8 @@
 import { property } from 'lit/decorators';
-import { customElement, html, WithoutShadowRoot } from './WithoutShadowRoot';
+import { customElement, html, StyledBase } from './StyledBase';
 
 @customElement('nd-preview')
-export class Preview extends WithoutShadowRoot {
+export class Preview extends StyledBase {
 	@property({ type: String })
 	text = ""
 	render() {
