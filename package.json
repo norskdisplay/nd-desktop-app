@@ -14,7 +14,7 @@
     "validate:defaultconfig": "tsc ./scripts/validateDefaultConfig.ts && node ./scripts/validateDefaultConfig.js",
     "dev": "concurrently \"npm:watch:styles\" \"npm:watch:webcomponents\" \"npm:watch\"",
     "watch:styles": "npx tailwindcss -i ./src/style.css -o ./dist/style.css --watch",
-    "build:styles": "npx tailwindcss -i ./src/style.css -o ./dist/style.css",
+    "build:styles": "npx tailwindcss -i ./src/style.css -o ./dist/style.css --minify",
     "watch": "tsc --watch  --project ./tsconfig.electron.json",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "npm run build && electron-forge start",

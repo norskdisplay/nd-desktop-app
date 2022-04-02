@@ -1,5 +1,6 @@
 import { IpcRenderer } from 'electron';
 import { Config } from './configSchema';
+import { LoadConfigResponse } from './types/LoadConfigResponse';
 
 interface AvailabePort {
 	path: string
@@ -16,5 +17,8 @@ declare global {
 		ipcRenderer: IpcRenderer
 		availablePorts: AvailabePort[]
 		config: Config
+		configStatus?: LoadConfigResponse
 	}
 }
+
+declare module ".import.css";

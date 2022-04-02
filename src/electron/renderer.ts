@@ -5,10 +5,10 @@
 // Use preload.js to selectively enable features
 // needed in the renderer process.
 (async () => {
-	const [availablePorts, config] = await Promise.all([
-		window.ipcRenderer.invoke('get-available-serial-ports'),
-		window.ipcRenderer.invoke('get-config') 
+	const [config, status] = await Promise.all([
+		window.ipcRenderer.invoke('get-config'),
+		window.ipcRenderer.invoke('get-config-status') 
 	])
-	window.availablePorts = availablePorts
 	window.config = config
+	window.configStatus = status
 })()

@@ -23,7 +23,7 @@ class SerialPort {
 
 	public checkAvailablePorts() {
 		this.availablePortsIntervalRef = setInterval(() => {
-			const ports = this.getAvailablePorts()
+			this.getAvailablePorts()
 		}, 1000)
 	}
 

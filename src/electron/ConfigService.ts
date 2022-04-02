@@ -1,4 +1,4 @@
-import { UploadConfigResponse } from './../types/LoadConfigResponse';
+import { LoadConfigResponse, UploadConfigResponse } from './../types/LoadConfigResponse';
 import { Config, configSchema } from './../configSchema';
 import { load, dump } from "js-yaml"
 import { readFile, writeFile, access } from "fs/promises"
@@ -9,6 +9,11 @@ import { getConfigFilePath } from './utils/getConfigFilePath';
 class ConfigService {
 	lastConfig: Config | null = null
 	configFilePath = getConfigFilePath()
+	loadConfigStatus?: LoadConfigResponse
+
+	public getStatus() {
+		return this.loadConfigStatus
+	}
 
 	public async getConfig() {
 		if (this.lastConfig === null) {
@@ -40,17 +45,36 @@ class ConfigService {
 			const exist = await this.configExist()
 			if (exist) {
 				logger.debug("Config exist, using existing")
-				await this.readConfig()
+				const config = await this.readConfig()
+				const validatedConfig = this.validateConfig(config)
+				if (!validatedConfig.success) {
+					this.loadConfigStatus = {
+						type: "validationerror",
+						data: validatedConfig.error.issues
+					}
+				}
 			} else {
 				logger.debug(`No config file found in ${this.configFilePath}, creating config file from default config.`)
 				await this.writeConfig(defaultConfig)
+				this.loadConfigStatus = {
+					type: "success",
+					message: "Created new config file"
+				}
 			}
 		} catch (e: unknown) {
 			if (e instanceof Error) {
 				logger.error("Unable to load config: " + e.toString())
-				return 
+				this.loadConfigStatus = {
+					type: "error",
+					message: e.message
+				}
+			} else {
+				logger.error("Could not load config. Error is not instance of error")
+				this.loadConfigStatus = {
+					type: "error",
+					message: "Could not load config. No error provided."
+				}
 			}
-			logger.error("Could not load config. Error is not instance of error")
 		}
 	}
 	private async readConfig(): Promise<Config> {
@@ -65,15 +89,19 @@ class ConfigService {
 		return resp
 	}
 
+	public validateConfig(config: Config) {
+		return configSchema.safeParse(config)
+	}
+
 	public async loadConfigFrom(source: string): Promise<UploadConfigResponse> {
 		try {
 			const rawConfig = await readFile(source, "utf-8")
 			const config = load(rawConfig) as Config
-			const validation = configSchema.safeParse(config)
-			if (!validation.success) {
+			const validatedConfig = this.validateConfig(config)
+			if (!validatedConfig.success) {
 				return {
 					type: "validationerror",
-					data: validation.error.issues
+					data: validatedConfig.error.issues
 				}
 			}
 			this.writeConfig(config)
