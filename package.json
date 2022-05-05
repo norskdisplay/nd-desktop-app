@@ -43,7 +43,7 @@
     "es-dev-server": "^2.1.0",
     "eslint": "^8.8.0",
     "eslint-plugin-lit": "^1.6.1",
-    "rollup": "^2.67.2",
+    "rollup": "^2.72.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-copy": "^3.4.0",
