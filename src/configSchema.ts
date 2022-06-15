@@ -63,12 +63,25 @@ export const userSettingsSchema = z.object({
 	writeInterval: z.number().min(1)
 })
 
+enum DisplayType  {
+	"numeric",
+	"alphanumeric",
+	"graphic"
+}
+
 export interface DisplayConfig {
+	/** if shared com port, use address to disiuish  */
+	address?: number
 	/**
 	 * Numbers of characters the display is able to show simultanously
 	 * Not required to input for user
 	 */
 	characters?: number
+	/**
+	 * number of lines the display can write
+	 */
+	type?: DisplayType
+	lines?: number
 	/**
 	 * Ledetekst - foran editeringstekst står det en tekst
 	 * "Silo 1"
@@ -80,6 +93,9 @@ export interface DisplayConfig {
 	name: string
 }
 export const displaySchema = z.object({
+	number: z.number().min(0).max(99).optional(),
+	lines: z.number().min(1).max(16).optional(),
+	type: z.enum(["numeric", "alphanumeric", "graphic"]).optional(),
 	characters: z.number().min(1).optional(),
 	description: z.string(),
 	name: z.string()

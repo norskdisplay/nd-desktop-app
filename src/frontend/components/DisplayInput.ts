@@ -32,7 +32,7 @@ export class DisplayInput extends StyledBase {
 	}
 
 	private sendText = async () => {
-		await window.ipcRenderer.invoke('send-text-serial-port', this.inputText)
+		await window.ipcRenderer.invoke('send-text-serial-port', String.fromCharCode(0x02) + this.inputText + '\r')
 	}
 	render() {
 		return html`

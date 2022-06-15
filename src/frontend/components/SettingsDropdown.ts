@@ -105,10 +105,10 @@ export class SettingsDropdown extends StyledBase {
 					</div>
 					<ul class="py-1" aria-labelledby="dropdown">
 						<li>
-							<button @click=${this.upload} class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 w-full text-left">Upload</button>
+							<button @click=${this.upload} class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 w-full text-left">Set config</button>
 						</li>
 						<li>
-							<button @click=${this.download} class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 w-full text-left">Download</button>
+							<button @click=${this.download} class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 w-full text-left">Get config</button>
 						</li>
 					</ul>
 				</div>

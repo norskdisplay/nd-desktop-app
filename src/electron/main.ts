@@ -14,7 +14,7 @@ try { // DOES IT WORK???? 🤔
 }
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-require("update-electron-app")()
+// require("update-electron-app")()
 
 /**
 "TypeError: Cannot read property 'indexOf' of undefined": 
