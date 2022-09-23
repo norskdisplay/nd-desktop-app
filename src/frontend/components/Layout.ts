@@ -1,30 +1,40 @@
 import { showModalEvent } from '../customEvents/toast';
-import { customElement, html, StyledBase } from './StyledBase';
+import { customElement, html, property, StyledBase } from './StyledBase';
 
 @customElement('nd-layout')
 export class Layout extends StyledBase {
+	@property({ type: Boolean })
+	showSettings = false;
 	connectedCallback(): void {
 		super.connectedCallback();
-			setTimeout(() => {
-				if (window.configStatus) {
-					if (window.configStatus.type === "validationerror") {
-						const issueString = window.configStatus.data.map((issue) => {
-							return `<li><pre class="bg-slate-200 inline-block rounded px-0.5">${issue.path.join(".")}</pre> ${issue.message}</li>`
-						}).join("")
-						document.dispatchEvent(showModalEvent({
-							heading: "Validation errors in uploaded file",
-							body: `<p class="bg-red-600 text-white p-4 rounded-lg mb-4">Due to errors in the uploaded config file, the settings has not beed updated. Fix the following errors in the file and try again:</p><ul class="list-disc 
-							list-inside">${issueString}</ul>`
-						}))
-					}
-					if (window.configStatus.type === "error") {
-						document.dispatchEvent(showModalEvent({
-							heading: "Whoops, error in config file",
-							body: `<p>An error occured when loading your local config. Exception message was:</p><p>${window.configStatus.message}</p>`
-						}))
-					}
+		document.addEventListener('show-settings', this.showSettingsHandler);
+		setTimeout(() => {
+			if (window.configStatus) {
+				if (window.configStatus.type === "validationerror") {
+					const issueString = window.configStatus.data.map((issue) => {
+						return `<li><pre class="bg-slate-200 inline-block rounded px-0.5">${issue.path.join(".")}</pre> ${issue.message}</li>`
+					}).join("")
+					document.dispatchEvent(showModalEvent({
+						heading: "Validation errors in uploaded file",
+						body: `<p class="bg-red-600 text-white p-4 rounded-lg mb-4">Due to errors in the uploaded config file, the settings has not beed updated. Fix the following errors in the file and try again:</p><ul class="list-disc 
+						list-inside">${issueString}</ul>`
+					}))
 				}
-			}, 200)
+				if (window.configStatus.type === "error") {
+					document.dispatchEvent(showModalEvent({
+						heading: "Whoops, error in config file",
+						body: `<p>An error occured when loading your local config. Exception message was:</p><p>${window.configStatus.message}</p>`
+					}))
+				}
+			}
+		}, 200)
+	}
+	showSettingsHandler = () =>  {
+		this.showSettings = true;
+	}
+	disconnectedCallback(): void {
+		super.disconnectedCallback()
+		document.removeEventListener("show-settings", this.showSettingsHandler)
 	}
 	render() {
 		return html`
@@ -38,7 +48,7 @@ export class Layout extends StyledBase {
 					</div>
 					<nd-settings-dropdown></nd-settings-dropdown>
 				</div>
-			
+
 				<!--Main-->
 				<div class="container px-6 mx-auto flex flex-wrap flex-col justify-center flex-grow">
 					<div class="flex justify-center mb-2 text-zinc-500">
@@ -49,6 +59,7 @@ export class Layout extends StyledBase {
 				</div>
 				<nd-toast-manager></nd-toast-manager>
 				<nd-upload-error></nd-upload-error>
+				<nd-modal ?show=${this.showSettings}><nd-settings></nd-settings></nd-modal>
 			</div>
 		`;
 	}

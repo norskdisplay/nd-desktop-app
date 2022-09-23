@@ -15,7 +15,7 @@ export class Modal extends StyledBase {
 					<div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
 						<h1 class="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Help</h1>
 						<div class="mb-5">
-							<nd-help-text></nd-help-text>
+							<slot></slot>
 						</div>
 
 						<div class="flex items-center justify-start w-full">

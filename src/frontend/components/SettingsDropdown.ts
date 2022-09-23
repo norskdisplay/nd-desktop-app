@@ -2,6 +2,7 @@ import { UploadConfigResponse } from './../../types/LoadConfigResponse';
 import { showModalEvent, showToastEvent } from '../customEvents/toast';
 import { isHTMLElement } from './../utils/isHTMLElement';
 import { customElement, html, state, StyledBase } from './StyledBase';
+import { showSettings } from '../customEvents/settings';
 
 @customElement('nd-settings-dropdown')
 export class SettingsDropdown extends StyledBase {
@@ -66,6 +67,10 @@ export class SettingsDropdown extends StyledBase {
 		})
 	}
 
+	private settings = () => {
+		document.dispatchEvent(showSettings())
+	}
+
 	private close() {
 		this.show = false
 	}
@@ -101,9 +106,12 @@ export class SettingsDropdown extends StyledBase {
 				<!-- Dropdown menu -->
 				<div class="${this.show ? "" : "hidden"} bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow drop-shadow-lg my-2 block absolute right-0 min-w-12em" id="dropdown">
 					<div class="px-4 py-3">
-						<span class="block text-sm font-bold">Config</span>
+						<span class="block text-sm font-bold">Menu</span>
 					</div>
 					<ul class="py-1" aria-labelledby="dropdown">
+						<li>
+							<button @click=${this.settings} class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 w-full text-left">Settings</button>
+						</li>
 						<li>
 							<button @click=${this.upload} class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2 w-full text-left">Set config</button>
 						</li>

@@ -54,10 +54,10 @@ export class DisplayInput extends StyledBase {
 					<button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded rounded-t-none rounded-b-none text-white px-2 py-2 text-sm" @click=${this.sendText}>Save</button>
 				</div>
 				<div>
-					<nd-preview text=${this.inputText} />
+					<nd-preview text=${this.inputText}></nd-preview>
 				</div>
 			</div>
-			<nd-modal ?show=${this.show} />
+			<nd-modal ?show=${this.show}><nd-help-text></nd-help-text></nd-modal>
 		`;
 	}
 }
