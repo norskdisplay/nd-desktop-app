@@ -6,16 +6,6 @@ import { config } from "./ConfigService";
 import { logger } from "./Logger";
 import { registerIpc } from "./ipcMain";
 
-try { // DOES IT WORK???? 🤔
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	require('electron-reloader')(module);
-} catch {
-	// Just catch the errors but do nothing
-}
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// require("update-electron-app")()
-
 /**
 "TypeError: Cannot read property 'indexOf' of undefined": 
 https://stackoverflow.com/questions/59231294/typeerror-cannot-read-property-indexof-of-undefined-raised-when-using-packa
@@ -34,7 +24,7 @@ function createWindow() {
 		frame: true,
 		// titleBarStyle: 'hidden',
 		// titleBarOverlay: true,
-		//   movable: true,
+		// movable: true,
 		resizable: true,
 		center: true,
 		width: 800,
@@ -45,20 +35,33 @@ function createWindow() {
 			sandbox: true
 		}
 	});
+	mainWindow.removeMenu()
 	if (!isDevMode) {
-		mainWindow.removeMenu()
+		mainWindow.loadURL(`file://${__dirname}/../index.html`);
+	} else {
+		mainWindow.loadURL('http://localhost:3000');
+
+		mainWindow.webContents.openDevTools();
+
+		// Hot Reloading on 'node_modules/.bin/electronPath'
+		require('electron-reload')(__dirname, {
+			electron: path.join(__dirname,
+				'..',
+				'..',
+				'node_modules',
+				'.bin',
+				'electron' + (process.platform === "win32" ? ".cmd" : "")),
+			forceHardReset: true,
+			hardResetMethod: 'exit'
+		});
 	}
-	mainWindow.loadFile(path.join(__dirname, "../../build/index.html"));
-	if (isDevMode) {
-		mainWindow.webContents.openDevTools()
-	}
-	registerIpc(mainWindow)	
+	registerIpc(mainWindow)
 }
 
 app.on("ready", async () => {
 	await config.loadConfig()
 	createWindow();
-	
+
 	app.on("activate", function () {
 		// On macOS it's common to re-create a window in the app when the
 		// dock icon is clicked and there are no other windows open.

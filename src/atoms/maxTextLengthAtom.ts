@@ -1,3 +1,3 @@
 import { atom } from 'jotai'
 
-export const maxTextLengthAtom = atom(24)
+export const maxTextLengthAtom = atom(100)

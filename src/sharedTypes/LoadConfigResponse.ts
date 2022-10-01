@@ -5,14 +5,17 @@ export type ValidationError = {
 	type: "validationerror",
 	data: ZodError<Config>["issues"]
 } 
-
-export type LoadConfigResponse = {
-	type: "success",
-	message: string
-} | {
+export type ErrorType = {
 	type: "error",
 	message: string
-} | ValidationError
+}
+
+export type SuccessType = {
+	type: "success",
+	message: string
+}
+
+export type LoadConfigResponse = SuccessType | ErrorType | ValidationError
 
 export type UploadConfigResponse = {
 	type: "success",

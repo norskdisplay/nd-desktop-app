@@ -20,6 +20,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import * as React from "react";
 import { useNavigate, Outlet } from "react-router-dom";
+import { useAtomValue } from "jotai";
+import { configErrorAtom } from "../atoms/configErrorAtom";
+import { ConfigErrorModal } from "./ConfigErrorModal";
 
 const darkTheme = createTheme({
 	palette: {
@@ -30,11 +33,12 @@ const darkTheme = createTheme({
 export const Layout = () => {
 	const navigate = useNavigate();
 	const [isOpen, setIsOpen] = React.useState(false);
+	const isError = useAtomValue(configErrorAtom)
 
 	const close = () => {
 		setIsOpen(false);
 	}
-
+	
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<CssBaseline />
@@ -94,6 +98,7 @@ export const Layout = () => {
 					</List>
 				</Box>
 			</Drawer>
+			{isError && <ConfigErrorModal />}
 		</ThemeProvider>
 	);
 }

@@ -3,37 +3,6 @@ import { z } from "zod";
 // Program can be long running process. Should not close window.
 // can cache text history - text displayed
 // merge fields burde oppdateres i interval - eks $h = hours akkurat nå
-// Droppe preview
-
-export interface GlobalConfig {
-	/**
-	 * The number of displays to allow in the interface
-	 * @default 100
-	 */
-	maxNumberOfDisplays: number
-	/**
-	 * @default 8
-	 */
-	dataBits: 5 | 6 | 7 | 8
-	/**
-	 * Can be 1 or 2
-	 * @default 1
-	 */
-	stopBits: 1 | 2
-	/**
-	 * @default 9600
-	 */
-	baudRate: number
-	/**
-	 * @default 32
-	 */
-	highWaterMark: number
-	/**
-	 * One of the following 'none' | 'even' | 'mark' |'odd' | 'space'
-	 * @default none
-	 */
-	parity: 'none' | 'even' | 'mark' |'odd' | 'space'
-}
 
 export const parityEnum = z.enum(['none', 'even', 'mark', 'odd', 'space']);
 export type ParityType = z.infer<typeof parityEnum>
@@ -45,17 +14,36 @@ export const dataBitsEnum = z.enum(["5", "6", "7", "8"]);
 export type DataBitType = z.infer<typeof dataBitsEnum>
 
 export const globalConfigSchema = z.object({
+	/**
+	 * The number of displays to allow in the interface
+	 * @default 100
+	 */
 	maxNumberOfDisplays: z.number().min(1).max(1000),
+	/**
+	 * @default 8
+	 */
 	dataBits: dataBitsEnum,
+	/**
+	 * Can be 1 or 2
+	 * @default 1
+	 */
 	stopBits: stopBitEnum,
+	/**
+	 * @default 9600
+	 */
 	baudRate: z.number().min(1).max(999999),
+	/**
+	 * @default 32
+	 */
 	highWaterMark: z.number().min(1).max(999999),
+	/**
+	 * One of the following 'none' | 'even' | 'mark' |'odd' | 'space'
+	 * @default none
+	 */
 	parity: parityEnum
 })
 
 export type GlobalConfigType = z.infer<typeof globalConfigSchema>
-// export const GlobalConfig = z.infer<typeof globalConfigSchema>
-// TODO: find out why typescript complains about ZOD infer method missing
 
 export interface UserSetting {
 	/**
@@ -75,46 +63,37 @@ export const userSettingsSchema = z.object({
 	writeInterval: z.number().min(1)
 })
 
-enum DisplayType  {
-	"numeric",
-	"alphanumeric",
-	"graphic"
-}
+export const displayTypeEnum = z.enum(["numeric", "alphanumeric", "graphic"]).optional();
+export type DispayTypeEnumType = z.infer<typeof displayTypeEnum>
 
-export interface DisplayConfig {
+export const displaySchema = z.object({
 	/** if shared com port, use address to disiuish  */
-	address?: number
+	address: z.number().min(0).max(99).optional(),
+	/**
+	 * number of lines the display can write
+	 */
+	lines: z.number().min(1).max(16).optional(),
+	type: displayTypeEnum,
 	/**
 	 * Numbers of characters the display is able to show simultanously
 	 * Not required to input for user
 	 */
-	characters?: number
-	/**
-	 * number of lines the display can write
-	 */
-	type?: DisplayType
-	lines?: number
+	characters: z.number().min(1).optional(),
 	/**
 	 * Ledetekst - foran editeringstekst står det en tekst
 	 * "Silo 1"
 	 */
-	description: string
+	description: z.string(),
 	/**
 	 * Name of display, used to identify display in UI
 	 */
-	name: string
-}
-export const displaySchema = z.object({
-	number: z.number().min(0).max(99).optional(),
-	lines: z.number().min(1).max(16).optional(),
-	type: z.enum(["numeric", "alphanumeric", "graphic"]).optional(),
-	characters: z.number().min(1).optional(),
-	description: z.string(),
 	name: z.string()
 })
 
+export type DisplayConfig = z.infer<typeof displaySchema>
+
 export interface Config {
-	config: GlobalConfig
+	config: GlobalConfigType
 	userSettings: UserSetting
 	displays: DisplayConfig[]
 }
