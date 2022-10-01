@@ -1,5 +1,5 @@
-import { LoadConfigResponse, UploadConfigResponse } from '../sharedTypes/LoadConfigResponse';
-import { Config, configSchema } from './../sharedTypes/configSchema';
+import { LoadConfigResponse, UploadConfigResponse } from '../src/sharedTypes/LoadConfigResponse';
+import { Config, configSchema } from './../src/sharedTypes/configSchema';
 import { load, dump } from "js-yaml"
 import { readFile, writeFile, access } from "fs/promises"
 import { logger } from "./Logger"

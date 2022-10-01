@@ -1,4 +1,4 @@
-import { UploadConfigResponse } from './../../sharedTypes/LoadConfigResponse';
+import { UploadConfigResponse } from './../../src/sharedTypes/LoadConfigResponse';
 import { app, dialog } from "electron"
 import { RegisterIpc } from "./index"
 import { logger } from "../Logger"

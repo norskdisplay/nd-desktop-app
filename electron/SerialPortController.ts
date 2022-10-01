@@ -1,4 +1,4 @@
-import { AvailabePort } from "../sharedTypes/globals"
+import { AvailabePort } from "../src/sharedTypes/globals"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const RequiredSerialPort = require("serialport")

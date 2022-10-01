@@ -1,4 +1,4 @@
-import { Config } from "../sharedTypes/configSchema";
+import { Config } from "../src/sharedTypes/configSchema";
 
 export const defaultConfig: Config = {
 	config: {

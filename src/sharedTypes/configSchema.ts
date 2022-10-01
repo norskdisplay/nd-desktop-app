@@ -34,14 +34,26 @@ export interface GlobalConfig {
 	 */
 	parity: 'none' | 'even' | 'mark' |'odd' | 'space'
 }
+
+export const parityEnum = z.enum(['none', 'even', 'mark', 'odd', 'space']);
+export type ParityType = z.infer<typeof parityEnum>
+
+export const stopBitEnum = z.enum(["1", "2"]);
+export type StopBitType = z.infer<typeof stopBitEnum>
+
+export const dataBitsEnum = z.enum(["5", "6", "7", "8"]);
+export type DataBitType = z.infer<typeof dataBitsEnum>
+
 export const globalConfigSchema = z.object({
 	maxNumberOfDisplays: z.number().min(1).max(1000),
-	dataBits: z.number().min(5).max(8),
-	stopBits: z.number().min(1).max(2),
+	dataBits: dataBitsEnum,
+	stopBits: stopBitEnum,
 	baudRate: z.number().min(1).max(999999),
 	highWaterMark: z.number().min(1).max(999999),
-	parity: z.enum(['none', 'even', 'mark', 'odd', 'space'])
+	parity: parityEnum
 })
+
+export type GlobalConfigType = z.infer<typeof globalConfigSchema>
 // export const GlobalConfig = z.infer<typeof globalConfigSchema>
 // TODO: find out why typescript complains about ZOD infer method missing
 
