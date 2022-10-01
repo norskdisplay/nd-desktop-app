@@ -27,7 +27,7 @@ const darkTheme = createTheme({
 	},
 });
 
-export const Layout = ()=> {
+export const Layout = () => {
 	const navigate = useNavigate();
 	const [isOpen, setIsOpen] = React.useState(false);
 
@@ -51,6 +51,7 @@ export const Layout = ()=> {
 						>
 							<MenuIcon />
 						</IconButton>
+						<img src="/logo.svg" style={{ display: "flex", height: "32px", marginRight: "16px" }} alt="Norsk Display logo" />
 						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 							Norsk Display
 						</Typography>
@@ -58,9 +59,9 @@ export const Layout = ()=> {
 				</AppBar>
 			</Box>
 			<Box sx={{ flexGrow: 1 }} padding="1">
-			<Container style={{ paddingTop: "1em" }}>
-				<Outlet />
-			</Container>
+				<Container style={{ paddingTop: "1em" }}>
+					<Outlet />
+				</Container>
 			</Box>
 			<Drawer
 				anchor="left"
