@@ -42,6 +42,7 @@ export const DisplayTextSelect = () => {
 					onChange={handleChange}
 					id="outlined-start-adornment"
 					type="text"
+					style={{ fontSize: "2em"}}
 					InputProps={{
 						endAdornment:
 							<InputAdornment position="end">

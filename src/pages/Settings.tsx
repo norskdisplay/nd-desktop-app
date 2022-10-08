@@ -1,23 +1,25 @@
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useAtomValue } from "jotai";
-import { ComPortSelect } from "../components/ComPortSelect";
-import { DataBitSelect } from "../components/DataBitSelect";
-import { MaxTextLengthSelect } from "../components/MaxTextLengthSelect";
-import { ParitySelect } from "../components/ParitySelect";
-import { RefreshRateSelect } from "../components/RefreshRateSelect";
-import { StopBitSelect } from "../components/StopBitSelect";
 import { globalConfigSchema, GlobalConfigType } from "../sharedTypes/configSchema";
-import { databitAtom, parityAtom, stopBitAtom } from "../atoms";
-import { useState } from "react";
+import { communicationProtocolAtom, databitAtom, parityAtom, stopBitAtom } from "../atoms";
 import Alert from "@mui/material/Alert";
+import { StartSendingOnAppStartSelect } from "../components/StartSendingOnAppStartSelect";
+import { MaxTextLengthSelect } from "../components/MaxTextLengthSelect";
+import { RefreshRateSelect } from "../components/RefreshRateSelect";
+import { useState } from "react";
+import { CommunicationProtocolSelect } from "../components/CommunicationProtocolSelect";
+import { COMFormSection } from "../components/COMFormSection";
+import { TCPFormSection } from "../components/TCPFormSection";
+import { StartAppOnOSLoginSelect } from "../components/StartAppOnOSLoginSelect";
 
 export const Settings = () => {
 	const [errors, setErrors] = useState<string[]>([]);
 	const dataBits = useAtomValue(databitAtom)
 	const parity = useAtomValue(parityAtom)
 	const stopBits = useAtomValue(stopBitAtom)
-	
+	const protocol = useAtomValue(communicationProtocolAtom)
+
 	const save = async () => {
 		removeAllErrors()
 		const config: GlobalConfigType = {
@@ -29,7 +31,7 @@ export const Settings = () => {
 			maxNumberOfDisplays: 100
 		};
 		var parser = globalConfigSchema.safeParse(config);
-		
+
 		if (parser.success) {
 			// await window.ipcRenderer.invoke("update-config", parser.data)
 			return;
@@ -43,10 +45,10 @@ export const Settings = () => {
 
 	return (
 		<>
-			<Typography variant="h3" gutterBottom>
+			<Typography variant="h6" gutterBottom>
 				Configuration
 			</Typography>
-			{!!errors.length && 
+			{!!errors.length &&
 				<Alert variant="filled" severity="error" style={{ marginBottom: "2em" }}>
 					Whoops, the following errors occured:
 					<ul>
@@ -54,12 +56,15 @@ export const Settings = () => {
 					</ul>
 				</Alert>
 			}
+			<StartAppOnOSLoginSelect />
+			<StartSendingOnAppStartSelect />
 			<MaxTextLengthSelect />
 			<RefreshRateSelect />
-			<ComPortSelect />
-			<ParitySelect />
-			<StopBitSelect />
-			<DataBitSelect />
+			<CommunicationProtocolSelect />
+			{protocol === "COM" ?
+				<COMFormSection /> :
+				<TCPFormSection />
+			}
 			<Button variant="contained" color="success" onClick={save}>Save</Button>
 		</>
 	);

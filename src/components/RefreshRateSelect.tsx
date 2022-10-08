@@ -17,12 +17,12 @@ export const RefreshRateSelect = () => {
 			setError("Refresh rate must me a number")
 			isValid = false
 		}
-		if (value < 10) {
-			setError("Refresh rate minimum is 10")
+		if (value < 100) {
+			setError("Refresh rate minimum is 100")
 			isValid = false
 		}
-		if (value > 100000) {
-			setError("Refresh rate maximum is 100 000")
+		if (value > 10000) {
+			setError("Refresh rate maximum is 10 000")
 			isValid = false
 		}
 		setValue(value);
@@ -36,7 +36,7 @@ export const RefreshRateSelect = () => {
 		<FormControl sx={{ mb: 4, width: '100%' }} error={!!error} variant="standard">
 			<TextField
 				id="refresh-rate"
-				label="Refresh rate"
+				label="Refresh rate (milliseconds)"
 				variant="standard"
 				value={value}
 				onChange={handleRefreshRateChange}

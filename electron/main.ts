@@ -27,8 +27,8 @@ function createWindow() {
 		// movable: true,
 		resizable: true,
 		center: true,
-		width: 800,
-		height: 600,
+		width: 400,
+		height: 550,
 		webPreferences: {
 			nodeIntegration: false,
 			preload: path.join(__dirname, "./preload.js"),
@@ -60,6 +60,10 @@ function createWindow() {
 
 app.on("ready", async () => {
 	await config.loadConfig()
+	// TODO: get open at login start from config
+	// app.setLoginItemSettings({
+	// 	openAtLogin: true,
+	// })
 	createWindow();
 
 	app.on("activate", function () {
