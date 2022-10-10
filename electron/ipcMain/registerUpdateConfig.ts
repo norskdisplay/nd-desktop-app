@@ -4,7 +4,7 @@ import { Config } from "../../src/sharedTypes/configSchema";
 import { config } from "../ConfigService";
 import { logger } from '../Logger';
 
-export const updateConfig: RegisterIpc = (ipcMain) => {
+export const registerUpdateConfig: RegisterIpc = (ipcMain) => {
 	ipcMain.handle('update-config', (event, newConfig: Config) => {
 		try {
 			const parser = configSchema.safeParse(newConfig)
