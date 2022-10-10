@@ -2,9 +2,9 @@ import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useAtom } from "jotai";
-import { ParityType, parityEnum } from "../sharedTypes/configSchema";
 import { parityAtom } from "../atoms/parityAtom";
 import InputLabel from "@mui/material/InputLabel";
+import { parityEnum, ParityType } from "../sharedTypes/comConfig";
 
 export const ParitySelect = () => {
 	const [parity, setParity] = useAtom(parityAtom)

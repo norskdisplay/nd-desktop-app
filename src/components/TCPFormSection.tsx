@@ -3,11 +3,11 @@ import FormHelperText from "@mui/material/FormHelperText"
 import TextField from "@mui/material/TextField"
 import { useAtom } from "jotai"
 import React, { useEffect, useState } from "react"
-import { ipAddressAtom, networkMaskAtom, portAtom } from "../atoms"
+import { ipAddressAtom, networkMaskAtom, tcpPortAtom } from "../atoms"
 
 export const TCPFormSection = () => {
 	const [ip, setIp] = useAtom(ipAddressAtom)
-	const [port, setPort] = useAtom(portAtom)
+	const [port, setPort] = useAtom(tcpPortAtom)
 	const [mask, setMask] = useAtom(networkMaskAtom)
 	const [machineIp, setMachineIp] = useState("")
 	

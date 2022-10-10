@@ -29,6 +29,7 @@ class ConfigService {
 			logger.debug("Updating config success")
 		} catch (e: unknown) {
 			logger.error(e)
+			throw e
 		}
 	}
 	private async configExist(): Promise<boolean> {
@@ -41,20 +42,22 @@ class ConfigService {
 	}
 	public async loadConfig(): Promise<void> {
 		logger.debug("Loading config...")
+		let configOperation: "existing" | "new" = "existing"
 		try {
 			const exist = await this.configExist()
 			if (exist) {
-				logger.debug("Config exist, using existing")
+				logger.debug("Config exist, using existing from path " + this.configFilePath)
 				const config = await this.readConfig()
 				const validatedConfig = this.validateConfig(config)
-				if (validatedConfig.success == false) {
+				if (validatedConfig.success === false) {
 					this.loadConfigStatus = {
 						type: "validationerror",
 						data: validatedConfig.error.issues
 					}
 				}
 			} else {
-				logger.debug(`No config file found in ${this.configFilePath}, creating config file from default config.`)
+				configOperation = "new"
+				logger.debug(`No config file found in ${this.configFilePath}, creating config file from default config...`)
 				await this.writeConfig(defaultConfig)
 				this.loadConfigStatus = {
 					type: "success",
@@ -63,13 +66,13 @@ class ConfigService {
 			}
 		} catch (e: unknown) {
 			if (e instanceof Error) {
-				logger.error("Unable to load config: " + e.toString())
+				logger.error("Unable to " + configOperation === "new" ? "load new config. Error message:" : "load existing config. Error message: " + e.message)
 				this.loadConfigStatus = {
 					type: "error",
 					message: e.message
 				}
 			} else {
-				logger.error("Could not load config. Error is not instance of error")
+				logger.error("Could not load " + configOperation + " config. Error is not instance of error")
 				this.loadConfigStatus = {
 					type: "error",
 					message: "Could not load config. No error provided."
@@ -98,7 +101,7 @@ class ConfigService {
 			const rawConfig = await readFile(source, "utf-8")
 			const config = load(rawConfig) as Config
 			const validatedConfig = this.validateConfig(config)
-			if (validatedConfig.success == false) {
+			if (validatedConfig.success === false) {
 				this.loadConfigStatus = {
 					type: "validationerror",
 					data: validatedConfig.error.issues

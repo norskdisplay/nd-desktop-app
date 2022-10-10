@@ -1,8 +1,7 @@
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useAtomValue } from "jotai";
-import { globalConfigSchema, GlobalConfigType } from "../sharedTypes/configSchema";
-import { communicationProtocolAtom, databitAtom, parityAtom, stopBitAtom } from "../atoms";
+import { communicationProtocolAtom, comPortAtom, databitAtom, ipAddressAtom, networkMaskAtom, parityAtom, tcpPortAtom, refreshRateAtom, startSendingOnAppStartAtom, stopBitAtom } from "../atoms";
 import Alert from "@mui/material/Alert";
 import { StartSendingOnAppStartSelect } from "../components/StartSendingOnAppStartSelect";
 import { MaxTextLengthSelect } from "../components/MaxTextLengthSelect";
@@ -12,6 +11,10 @@ import { CommunicationProtocolSelect } from "../components/CommunicationProtocol
 import { COMFormSection } from "../components/COMFormSection";
 import { TCPFormSection } from "../components/TCPFormSection";
 import { StartAppOnOSLoginSelect } from "../components/StartAppOnOSLoginSelect";
+import { Config, configSchema } from "../sharedTypes/configSchema";
+import { startAppOnOSLoginAtom } from "../atoms/startAppOnOSLoginAtom";
+import { TCPConfig, tcpConfigSchema } from "../sharedTypes/tcpConfig";
+import { COMConfig, comConfigSchema } from "../sharedTypes/comConfig";
 
 export const Settings = () => {
 	const [errors, setErrors] = useState<string[]>([]);
@@ -19,29 +22,60 @@ export const Settings = () => {
 	const parity = useAtomValue(parityAtom)
 	const stopBits = useAtomValue(stopBitAtom)
 	const protocol = useAtomValue(communicationProtocolAtom)
+	const startOnOsLogin = useAtomValue(startAppOnOSLoginAtom)
+	const startOnAppStart = useAtomValue(startSendingOnAppStartAtom)
+	const refreshRate = useAtomValue(refreshRateAtom)
+	const comPort = useAtomValue(comPortAtom)
+	const ip = useAtomValue(ipAddressAtom)
+	const networkMask = useAtomValue(networkMaskAtom)
+	const tcpPort = useAtomValue(tcpPortAtom)
 
 	const save = async () => {
-		removeAllErrors()
-		const config: GlobalConfigType = {
+		setErrors([])
+		const tcpConfig: TCPConfig = {
+			ip: ip,
+			networkMask: networkMask,
+			port: tcpPort
+		}
+		const comConfig: COMConfig = {
+			port: comPort,
 			baudRate: 9600,
 			dataBits: dataBits,
 			highWaterMark: 32,
 			parity: parity,
 			stopBits: stopBits,
-			maxNumberOfDisplays: 100
+		}
+		const unusedConfigIsValid = protocol === "COM" ? tcpConfigSchema.safeParse(tcpConfig).success : comConfigSchema.safeParse(comConfig).success
+		const config: Config = {
+			out: {
+				refreshRate: refreshRate,
+				protocol: protocol,
+				comConfig: protocol === "TCP" && !unusedConfigIsValid ? null : comConfig,
+				tcpConfig: protocol === "COM" && !unusedConfigIsValid ? null : tcpConfig,
+			},
+			user: {
+				startAppOnOSLogin: startOnOsLogin,
+				startSendingOnAppStart: startOnAppStart
+			},
+			displays: []
 		};
-		var parser = globalConfigSchema.safeParse(config);
+		var parser = configSchema.safeParse(config);
 
 		if (parser.success) {
-			// await window.ipcRenderer.invoke("update-config", parser.data)
+			const err = await window.ipcRenderer.invoke("update-config", parser.data)
+			if (Array.isArray(err)) {
+				setErrors(err)
+			}
 			return;
 		}
 		if (!parser.success) {
+			
 			parser.error.issues.map((issue) => setErrors([...errors, issue.message]));
+			window.scrollTo({
+				top: 0
+			})
 		}
 	}
-
-	const removeAllErrors = () => setErrors([])
 
 	return (
 		<>
@@ -52,7 +86,7 @@ export const Settings = () => {
 				<Alert variant="filled" severity="error" style={{ marginBottom: "2em" }}>
 					Whoops, the following errors occured:
 					<ul>
-						{errors.map((err) => <li key={err}>{err}</li>)}
+						{errors.map((err, ind) => <li key={err + "_" + ind}>{err}</li>)}
 					</ul>
 				</Alert>
 			}

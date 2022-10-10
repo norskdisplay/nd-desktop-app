@@ -2,9 +2,9 @@ import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useAtom } from "jotai";
-import { dataBitsEnum, DataBitType } from "../sharedTypes/configSchema";
 import InputLabel from "@mui/material/InputLabel";
 import { databitAtom } from "../atoms";
+import { dataBitsEnum, DataBitType } from "../sharedTypes/comConfig";
 
 export const DataBitSelect = () => {
 	const [dataBit, setDataBit] = useAtom(databitAtom)

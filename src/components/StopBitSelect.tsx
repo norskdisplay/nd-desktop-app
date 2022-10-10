@@ -2,9 +2,9 @@ import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useAtom } from "jotai";
-import { stopBitEnum, StopBitType } from "../sharedTypes/configSchema";
 import InputLabel from "@mui/material/InputLabel";
 import { stopBitAtom } from "../atoms";
+import { stopBitEnum, StopBitType } from "../sharedTypes/comConfig";
 
 export const StopBitSelect = () => {
 	const [stopBit, setStopBit] = useAtom(stopBitAtom)

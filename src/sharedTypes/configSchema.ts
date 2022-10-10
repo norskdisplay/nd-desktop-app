@@ -1,115 +1,43 @@
 import { z } from "zod";
-import isIp from 'validator/lib/isIP';
-
-const networkMaskRegex = /^(\*|25[0-5\*]|2[0-4\*][0-9\*]|[01\*]?[0-9\*][0-9\*]?)\.(\*|25[0-5\*]|2[0-4\*][0-9\*]|[01\*]?[0-9\*][0-9\*]?)\.(\*|25[0-5\*]|2[0-4\*][0-9\*]|[01\*]?[0-9\*][0-9\*]?)\.(\*|25[0-5\*]|2[0-4\*][0-9\*]|[01\*]?[0-9*][0-9*]?)$/
-const isNetworkMask = (maybeMask: string) => {
-	return networkMaskRegex.test(maybeMask)
-}
-
-export const parityEnum = z.enum(['none', 'even', 'mark', 'odd', 'space']);
-export type ParityType = z.infer<typeof parityEnum>
-
-export const stopBitEnum = z.enum(["1", "2"]);
-export type StopBitType = z.infer<typeof stopBitEnum>
-
-export const dataBitsEnum = z.enum(["5", "6", "7", "8"]);
-export type DataBitType = z.infer<typeof dataBitsEnum>
+import { comConfigSchema } from "./comConfig";
+import { tcpConfigSchema } from "./tcpConfig";
+import { userConfigSchema } from "./userConfig";
 
 export const communicationProtocolEnum = z.enum(["COM", "TCP"]);
 export type CommunicationProtocolType = z.infer<typeof communicationProtocolEnum>
 
-export const ComConfiguration = z.object({
-	/**
-	 * @default 8
-	 */
-	dataBits: dataBitsEnum,
-	/**
-	 * Can be 1 or 2
-	 * @default 1
-	 */
-	stopBits: stopBitEnum,
-	/**
-	 * @default 9600
-	 */
-	baudRate: z.number().min(1).max(999999),
-	/**
-	 * @default 32
-	 */
-	highWaterMark: z.number().min(1).max(999999),
-	/**
-	 * One of the following 'none' | 'even' | 'mark' |'odd' | 'space'
-	 * @default none
-	 */
-	parity: parityEnum
+export const outConfigSchema = z.object({
+	refreshRate: z.number().min(100).max(10000),
+	protocol: communicationProtocolEnum,
+	tcpConfig: tcpConfigSchema.nullable(),
+	comConfig: comConfigSchema.nullable()
+}).refine((args) => {
+	if (args.protocol !== "COM") return true;
+	return args.comConfig != null;
+}, {
+	message: "COM config is required",
+	path: ["comConfig"]
+}).refine((args) => {
+	if (args.protocol !== "TCP") return true;
+	return args.tcpConfig != null;
+}, {
+	message: "TCP config is required",
+	path: ["tcpConfig"]
 })
 
-export const TCPConfiguration = z.object({
-	ip: z.string().refine(isIp, "This does not look like a valid IP address."),
-	networkMask: z.string().refine(isNetworkMask, "This does not look like a valid network mask"),
-	port: z.number().min(0).max(65535)
-})
+export type OutConfig = z.infer<typeof outConfigSchema>
 
-export const globalConfigSchema = z.object({
-	/**
-	 * The number of displays to allow in the interface
-	 * @default 100
-	 */
-	maxNumberOfDisplays: z.number().min(1).max(1000),
-	/**
-	 * @default 8
-	 */
-	dataBits: dataBitsEnum,
-	/**
-	 * Can be 1 or 2
-	 * @default 1
-	 */
-	stopBits: stopBitEnum,
-	/**
-	 * @default 9600
-	 */
-	baudRate: z.number().min(1).max(999999),
-	/**
-	 * @default 32
-	 */
-	highWaterMark: z.number().min(1).max(999999),
-	/**
-	 * One of the following 'none' | 'even' | 'mark' |'odd' | 'space'
-	 * @default none
-	 */
-	parity: parityEnum
-})
-
-export type GlobalConfigType = z.infer<typeof globalConfigSchema>
-
-export interface UserSetting {
-	/**
-	 * The selected COM port
-	 * @default COM1
-	 */
-	port: string
-	/**
-	 * Time between message send
-	 * from 1 to 100000
-	 * @default 500
-	 */
-	writeInterval: number
-}
-export const userSettingsSchema = z.object({
-	port: z.string(),
-	writeInterval: z.number().min(1)
-})
-
-export const displayTypeEnum = z.enum(["numeric", "alphanumeric", "graphic"]).optional();
+export const displayTypeEnum = z.enum(["numeric", "alphanumeric", "graphic"]);
 export type DispayTypeEnumType = z.infer<typeof displayTypeEnum>
 
-export const displaySchema = z.object({
+export const displayConfigSchema = z.object({
 	/** if shared com port, use address to disiuish  */
 	address: z.number().min(0).max(99).optional(),
 	/**
 	 * number of lines the display can write
 	 */
 	lines: z.number().min(1).max(16).optional(),
-	type: displayTypeEnum,
+	type: displayTypeEnum.optional(),
 	/**
 	 * Numbers of characters the display is able to show simultanously
 	 * Not required to input for user
@@ -126,16 +54,12 @@ export const displaySchema = z.object({
 	name: z.string()
 })
 
-export type DisplayConfig = z.infer<typeof displaySchema>
-
-export interface Config {
-	config: GlobalConfigType
-	userSettings: UserSetting
-	displays: DisplayConfig[]
-}
+export type DisplayConfig = z.infer<typeof displayConfigSchema>
 
 export const configSchema = z.object({
-	config: globalConfigSchema,
-	userSettings: userSettingsSchema,
-	displays: z.array(displaySchema)
+	out: outConfigSchema,
+	user: userConfigSchema,
+	displays: z.array(displayConfigSchema)
 })
+
+export type Config = z.infer<typeof configSchema>
