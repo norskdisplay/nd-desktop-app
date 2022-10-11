@@ -1,3 +1,5 @@
+import { includeMergeFields } from './../src/utils/replaceText';
+import { SerialPortControllerConfig } from './types/CommunicationConfigType';
 import { logger } from "./Logger"
 import { SerialPortController } from "./SerialPortController"
 
@@ -5,14 +7,12 @@ class SerialPort {
 	intervalRef: NodeJS.Timeout | null = null
 	availablePortsIntervalRef: NodeJS.Timeout | null = null
 	writeFailedCount = 0
+	text: string = ""
 	serialConnection: SerialPortController | null = null
 	
 	async getAvailablePorts() {
 		try {
 			const ports = await SerialPortController.getAvailablePorts()
-			if (ports.length > 0) {
-				this.handleSelectPort(ports[0].path)
-			}
 			return ports
 		} catch (e) {
 			const message = e instanceof Error ? e.message : "No error message provided"
@@ -21,29 +21,28 @@ class SerialPort {
 		}
 	}
 
+	public start(config: SerialPortControllerConfig) {
+		if (config.config == null) return // should nevner happen
+		this.serialConnection = new SerialPortController()
+		this.serialConnection.start(config)
+		console.log(includeMergeFields(config.text))
+		this.writeInterval(includeMergeFields(config.text), config.config.refreshRate)
+	}
+
+	public async stop() {
+		await this.close()
+	}
+
 	public checkAvailablePorts() {
 		this.availablePortsIntervalRef = setInterval(() => {
 			this.getAvailablePorts()
 		}, 1000)
 	}
 
-	async handleSelectPort(port: string) {
-		if (this.serialConnection === null) {
-			this.serialConnection = new SerialPortController(port)
-			return
-		}
-		if (this.serialConnection.configuredPort() !== port) {
-			await this.serialConnection.disconnect()
-			this.serialConnection = new SerialPortController(port)
-			this.reset()
-			return
-		}
-	}
-
 	public async close() {
 		this.reset()
 		if (this.serialConnection) {
-			await this.serialConnection.disconnect()
+			await this.serialConnection.close()
 			this.serialConnection = null
 		}
 	}
@@ -58,6 +57,7 @@ class SerialPort {
 	async write(text: string) {
 		try {
 			if (!this.serialConnection) {
+				logger.error("No serial connection instance exist")
 				throw new Error("No serial connection instance exist")
 			}
 			await this.serialConnection.write(text)

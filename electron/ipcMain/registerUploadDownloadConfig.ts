@@ -2,7 +2,7 @@ import { UploadConfigResponse } from './../../src/sharedTypes/LoadConfigResponse
 import { app, dialog } from "electron"
 import { RegisterIpc } from "./index"
 import { logger } from "../Logger"
-import { config } from "../ConfigService"
+import { configService } from "../ConfigService"
 import { resolve } from "path"
 import { configFileName } from "../utils/getConfigFilePath"
 
@@ -25,7 +25,7 @@ export const registerUploadDownloadConfig: RegisterIpc = (ipcMain, mainWindow) =
 				}
 			}
 			logger.debug("Selected folder: " + filePaths.join(", "))
-			const resp = await config.writeCurrentConfigTo(resolve(filePaths[0], configFileName));
+			const resp = await configService.writeCurrentConfigTo(resolve(filePaths[0], configFileName));
 			return {
 				status: "success",
 				message: "File downloaded to " + resp.dest
@@ -57,7 +57,7 @@ export const registerUploadDownloadConfig: RegisterIpc = (ipcMain, mainWindow) =
 				}
 			}
 			logger.debug("Selected folder: " + filePaths.join(", "))
-			return await config.loadConfigFrom(filePaths[0])
+			return await configService.loadConfigFrom(filePaths[0])
 		} catch (e: unknown) {
 			const isError = e instanceof Error
 			logger.error("Upload config failed " + (isError ? e.message : "Unspecified error"))

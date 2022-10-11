@@ -6,8 +6,11 @@ import { userConfigSchema } from "./userConfig";
 export const communicationProtocolEnum = z.enum(["COM", "TCP"]);
 export type CommunicationProtocolType = z.infer<typeof communicationProtocolEnum>
 
+export const refreshRateSchema = z.number().min(100).max(10000)
+export type RefreshRateType = z.infer<typeof refreshRateSchema>
+
 export const outConfigSchema = z.object({
-	refreshRate: z.number().min(100).max(10000),
+	refreshRate: refreshRateSchema,
 	protocol: communicationProtocolEnum,
 	tcpConfig: tcpConfigSchema.nullable(),
 	comConfig: comConfigSchema.nullable()

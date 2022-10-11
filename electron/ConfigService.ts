@@ -11,6 +11,10 @@ class ConfigService {
 	configFilePath = getConfigFilePath()
 	loadConfigStatus?: LoadConfigResponse
 
+	public get isValid() {
+		return this.loadConfigStatus !== undefined ? this.loadConfigStatus.type === "success" : false
+	}
+
 	public getStatus() {
 		return this.loadConfigStatus
 	}
@@ -19,8 +23,9 @@ class ConfigService {
 		if (this.lastConfig === null) {
 			await this.loadConfig()
 		}
-		return this.lastConfig as Config
+		return this.lastConfig!
 	}
+
 	public async updateConfig(c: Config) {
 		logger.debug("Updating config " + JSON.stringify(c))
 		try {
@@ -54,6 +59,11 @@ class ConfigService {
 						type: "validationerror",
 						data: validatedConfig.error.issues
 					}
+					return
+				}
+				this.loadConfigStatus = {
+					type: "success",
+					message: "Loaded config from file"
 				}
 			} else {
 				configOperation = "new"
@@ -131,4 +141,4 @@ class ConfigService {
 	}
 }
 
-export const config = new ConfigService()
+export const configService = new ConfigService()

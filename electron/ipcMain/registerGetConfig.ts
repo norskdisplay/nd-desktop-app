@@ -1,8 +1,8 @@
 import { RegisterIpc } from ".";
-import { config } from "../ConfigService";
+import { configService } from "../ConfigService";
 
 export const registerGetConfig: RegisterIpc = (ipcMain) => {
 	ipcMain.handle('get-config', () => {
-		return config.getConfig()
+		return configService.getConfig()
 	})
 }

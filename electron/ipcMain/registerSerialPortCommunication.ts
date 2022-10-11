@@ -7,11 +7,7 @@ export const registerSerialPortCommunication: RegisterIpc = (ipcMain) => {
 		return result
 	})
 	
-	ipcMain.handle('set-choosen-serial-port', async (event, port: string) => {
-		return await serialPort.handleSelectPort(port)
-	})
-	
-	ipcMain.handle('send-text-serial-port', (event, text: string) => {
-		serialPort.writeInterval(text)
+	ipcMain.handle('start-broadcast', (event) => {
+		// serialPort.writeInterval(text)
 	})
 }

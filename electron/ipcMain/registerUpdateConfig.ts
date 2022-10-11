@@ -1,7 +1,7 @@
 import { configSchema } from './../../src/sharedTypes/configSchema';
 import { RegisterIpc } from ".";
 import { Config } from "../../src/sharedTypes/configSchema";
-import { config } from "../ConfigService";
+import { configService } from "../ConfigService";
 import { logger } from '../Logger';
 
 export const registerUpdateConfig: RegisterIpc = (ipcMain) => {
@@ -10,7 +10,7 @@ export const registerUpdateConfig: RegisterIpc = (ipcMain) => {
 			const parser = configSchema.safeParse(newConfig)
 			if (parser.success) {
 				logger.debug("updateConfig: got valid config.")
-				return config.updateConfig(newConfig)
+				return configService.updateConfig(newConfig)
 			}
 			logger.debug("updateConfig: config is invalid")
 			return parser.error.issues.map(issue => issue.message);

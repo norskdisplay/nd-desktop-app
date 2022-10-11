@@ -2,7 +2,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { communicationProtocolAtom, comPortAtom, configErrorAtom, databitAtom, ipAddressAtom, networkMaskAtom, parityAtom, refreshRateAtom, startAppOnOSLoginAtom, startSendingOnAppStartAtom, stopBitAtom, tcpPortAtom } from "./atoms";
+import { communicationProtocolAtom, comPortAtom, configErrorAtom, databitAtom, displayTextAtom, ipAddressAtom, networkMaskAtom, parityAtom, refreshRateAtom, startAppOnOSLoginAtom, startSendingOnAppStartAtom, stopBitAtom, tcpPortAtom } from "./atoms";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
 import { NoMatch } from "./pages/NoMatch";
@@ -21,6 +21,7 @@ export const Router = () => {
 	const setIp = useSetAtom(ipAddressAtom)
 	const setNetworkMask = useSetAtom(networkMaskAtom)
 	const setTcpPort = useSetAtom(tcpPortAtom)
+	const setDisplayText = useSetAtom(displayTextAtom)
 	const [isConfigLoaded, setIsConfigLoaded] = useState(false);
 	const [isConfigStatusLoaded, setIsConfigStatusLoaded] = useState(false);
 	const setConfigError = useSetAtom(configErrorAtom)
@@ -47,6 +48,9 @@ export const Router = () => {
 				setRefreshRate(config.out.refreshRate)
 				setStartOnAppStart(config.user.startAppOnOSLogin)
 				setStartOnOsLogin(config.user.startSendingOnAppStart)
+				if (config.displays.length) {
+					setDisplayText(config.displays[0].description)
+				}
 			}
 		})
 		window.ipcRenderer.invoke('get-config-status').then((status) => {

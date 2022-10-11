@@ -1,10 +1,9 @@
 import { app, BrowserWindow, shell } from "electron";
 import * as path from "path";
-import { serialPort } from "./SerialPort";
 import { URL } from "url"
-import { config } from "./ConfigService";
 import { logger } from "./Logger";
 import { registerIpc } from "./ipcMain";
+import { appService } from "./AppService";
 
 /**
 "TypeError: Cannot read property 'indexOf' of undefined": 
@@ -59,11 +58,7 @@ function createWindow() {
 }
 
 app.on("ready", async () => {
-	await config.loadConfig()
-	// TODO: get open at login start from config
-	// app.setLoginItemSettings({
-	// 	openAtLogin: true,
-	// })
+	await appService.Start(app)
 	createWindow();
 
 	app.on("activate", function () {
@@ -82,7 +77,6 @@ process.on("unhandledRejection", (reason: string | object | Error) => {
 	logger.error(reason)
 	throw reason // will end up in uncaughtException
 })
-
 
 // For security reasons, allow only navigate to norsk display
 // ref https://www.electronjs.org/docs/latest/tutorial/security#13-disable-or-limit-navigation
@@ -109,7 +103,7 @@ app.on('web-contents-created', (event, contents) => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", async () => {
-	await serialPort.close()
+	await appService.Stop()
 	if (process.platform !== "darwin") {
 		app.quit();
 	}
