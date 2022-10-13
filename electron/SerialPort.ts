@@ -26,8 +26,7 @@ class SerialPort {
 		if (config.config == null) return // should nevner happen
 		this.serialConnection = new SerialPortController()
 		this.serialConnection.start(config)
-		const text = withAscii(includeMergeFields(config.text))
-		this.writeInterval(text, config.config.refreshRate)
+		this.writeInterval(config.text, config.config.refreshRate)
 	}
 
 	public async stop() {
@@ -70,8 +69,9 @@ class SerialPort {
 		}
 	}
 	
-	writeInterval = async (text: string, ms = 10) => {
+	writeInterval = async (rawText: string, ms = 10) => {
 		this.intervalRef = setInterval(() => {
+			const text = withAscii(includeMergeFields(rawText))
 			this.write(text)
 		}, ms)
 	}
