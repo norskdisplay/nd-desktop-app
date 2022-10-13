@@ -1,7 +1,8 @@
 {
 	"name": "nd-desktop-app",
 	"version": "1.0.0",
-	"description": "A simple desktop app built with Electron",
+	"description": "Norsk Displays desktop application",
+	"homepage": ".",
 	"main": "build/electron/main.js",
 	"scripts": {
 		"start": "react-scripts start",
@@ -68,34 +69,9 @@
 		"web-vitals": "^3.0.2",
 		"zod": "^3.19.1"
 	},
-	"config": {
-		"forge": {
-			"packagerConfig": {},
-			"makers": [
-				{
-					"name": "@electron-forge/maker-squirrel",
-					"config": {
-						"name": "NorskDisplay"
-					}
-				},
-				{
-					"name": "@electron-forge/maker-zip",
-					"platforms": [
-						"darwin"
-					]
-				},
-				{
-					"name": "@electron-forge/maker-deb",
-					"config": {}
-				},
-				{
-					"name": "@electron-forge/maker-rpm",
-					"config": {}
-				}
-			]
-		}
-	},
 	"build": {
+		"appId": "com.electron.norskdisplay",
+		"productName": "Norsk Display",
 		"extends": null,
 		"files": [
 			"build/**/*"

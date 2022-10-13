@@ -2,6 +2,7 @@ import { includeMergeFields } from './../src/utils/replaceText';
 import { SerialPortControllerConfig } from './types/CommunicationConfigType';
 import { logger } from "./Logger"
 import { SerialPortController } from "./SerialPortController"
+import { withAscii } from './utils/withAscii';
 
 class SerialPort {
 	intervalRef: NodeJS.Timeout | null = null
@@ -25,8 +26,8 @@ class SerialPort {
 		if (config.config == null) return // should nevner happen
 		this.serialConnection = new SerialPortController()
 		this.serialConnection.start(config)
-		console.log(includeMergeFields(config.text))
-		this.writeInterval(includeMergeFields(config.text), config.config.refreshRate)
+		const text = withAscii(includeMergeFields(config.text))
+		this.writeInterval(text, config.config.refreshRate)
 	}
 
 	public async stop() {

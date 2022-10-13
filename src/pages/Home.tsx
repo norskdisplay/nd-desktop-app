@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import { useAtomValue } from "jotai";
 import { useState } from "react";
-import { communicationProtocolAtom, comPortAtom, databitAtom, ipAddressAtom, networkMaskAtom, parityAtom, tcpPortAtom, refreshRateAtom, startSendingOnAppStartAtom, stopBitAtom, startAppOnOSLoginAtom, displayTextAtom } from "../atoms";
+import { communicationProtocolAtom, comPortAtom, databitAtom, ipAddressAtom, networkMaskAtom, parityAtom, tcpPortAtom, refreshRateAtom, startSendingOnAppStartAtom, stopBitAtom, startAppOnOSLoginAtom, displayTextAtom, baduRateAtom } from "../atoms";
 import { DisplayTextSelect } from "../components/DisplayTextSelect";
 import { PreviewDisplayText } from "../components/PreviewDisplayText";
 import { COMConfig, comConfigSchema } from "../sharedTypes/comConfig";
@@ -22,6 +22,7 @@ export const Home = () => {
 	const networkMask = useAtomValue(networkMaskAtom)
 	const tcpPort = useAtomValue(tcpPortAtom)
 	const displayText = useAtomValue(displayTextAtom)
+	const baduRate = useAtomValue(baduRateAtom)
 
 	const save = async () => {
 		setErrors([])
@@ -32,7 +33,7 @@ export const Home = () => {
 		}
 		const comConfig: COMConfig = {
 			port: comPort,
-			baudRate: 9600,
+			baudRate: baduRate,
 			dataBits: dataBits,
 			highWaterMark: 32,
 			parity: parity,

@@ -2,6 +2,7 @@ import { TcpControllerConfig } from "./types/CommunicationConfigType";
 import { Socket } from "net"
 import { logger } from "./Logger";
 import { includeMergeFields } from "../src/utils/replaceText";
+import { withAscii } from "./utils/withAscii";
 
 export class TcpController {
 	private config: TcpControllerConfig | null = null
@@ -14,7 +15,7 @@ export class TcpController {
 		
 		this.intervalRef = setInterval(() => {
 			if (this.socket != null) {
-				var textToWrite = includeMergeFields(str)
+				var textToWrite = withAscii(includeMergeFields(str))
 				this.socket.write(textToWrite)
 			}
 		}, this.refreshRate)

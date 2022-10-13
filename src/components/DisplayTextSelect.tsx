@@ -12,6 +12,7 @@ import Modal from "@mui/material/Modal"
 import Fade from "@mui/material/Fade";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { Button } from "@mui/material";
 
 const style = {
 	position: 'absolute' as 'absolute',
@@ -70,7 +71,7 @@ export const DisplayTextSelect = () => {
 				}}
 			>
 				<Fade in={showModal}>
-					<Box sx={style}>
+					<Box sx={style} style={{ maxHeight: "100%", overflowX: "auto" }}>
 						<div className="overflow-auto h-full">
 							<Typography id="transition-modal-title" variant="h6" component="h2">
 								Variables in display text
@@ -96,6 +97,7 @@ export const DisplayTextSelect = () => {
 							<div className="mb-1">
 								<pre className="inline-block">$D</pre> will print the name of the current day
 							</div>
+							<Button onClick={handleModalClose}>Close</Button>
 						</div>
 					</Box>
 				</Fade>

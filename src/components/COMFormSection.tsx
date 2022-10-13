@@ -1,3 +1,4 @@
+import { BaduRateSelect } from "./BaduRateSelect"
 import { ComPortSelect } from "./ComPortSelect"
 import { DataBitSelect } from "./DataBitSelect"
 import { ParitySelect } from "./ParitySelect"
@@ -10,6 +11,7 @@ export const COMFormSection = () => {
 			<ParitySelect />
 			<StopBitSelect />
 			<DataBitSelect />
+			<BaduRateSelect />
 		</>
 	)
 }

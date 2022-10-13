@@ -63,6 +63,11 @@ class AppService {
 		})
 	}
 
+	public async Restart() {
+		await this.Stop()
+		await this.requestStart()
+	}
+
 	public async Start(app: Electron.App) {
 		this.app = app
 		await configService.loadConfig()

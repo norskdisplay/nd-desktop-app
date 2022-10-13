@@ -10,8 +10,6 @@ import { appService } from "./AppService";
 https://stackoverflow.com/questions/59231294/typeerror-cannot-read-property-indexof-of-undefined-raised-when-using-packa
  */
 
-const isDevMode = !app.isPackaged
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
 	// eslint-disable-line global-require
@@ -35,7 +33,7 @@ function createWindow() {
 		}
 	});
 	mainWindow.removeMenu()
-	if (!isDevMode) {
+	if (app.isPackaged) {
 		mainWindow.loadURL(`file://${__dirname}/../index.html`);
 	} else {
 		mainWindow.loadURL('http://localhost:3000');

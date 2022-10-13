@@ -1,10 +1,9 @@
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useAtomValue } from "jotai";
-import { communicationProtocolAtom, comPortAtom, databitAtom, ipAddressAtom, networkMaskAtom, parityAtom, tcpPortAtom, refreshRateAtom, startSendingOnAppStartAtom, stopBitAtom } from "../atoms";
+import { communicationProtocolAtom, comPortAtom, databitAtom, ipAddressAtom, networkMaskAtom, parityAtom, tcpPortAtom, refreshRateAtom, startSendingOnAppStartAtom, stopBitAtom, baduRateAtom, displayTextAtom } from "../atoms";
 import Alert from "@mui/material/Alert";
 import { StartSendingOnAppStartSelect } from "../components/StartSendingOnAppStartSelect";
-import { MaxTextLengthSelect } from "../components/MaxTextLengthSelect";
 import { RefreshRateSelect } from "../components/RefreshRateSelect";
 import { useState } from "react";
 import { CommunicationProtocolSelect } from "../components/CommunicationProtocolSelect";
@@ -29,6 +28,8 @@ export const Settings = () => {
 	const ip = useAtomValue(ipAddressAtom)
 	const networkMask = useAtomValue(networkMaskAtom)
 	const tcpPort = useAtomValue(tcpPortAtom)
+	const baduRate = useAtomValue(baduRateAtom)
+	const displayText = useAtomValue(displayTextAtom)
 
 	const save = async () => {
 		setErrors([])
@@ -39,7 +40,7 @@ export const Settings = () => {
 		}
 		const comConfig: COMConfig = {
 			port: comPort,
-			baudRate: 9600,
+			baudRate: baduRate,
 			dataBits: dataBits,
 			highWaterMark: 32,
 			parity: parity,
@@ -57,7 +58,10 @@ export const Settings = () => {
 				startAppOnOSLogin: startOnOsLogin,
 				startSendingOnAppStart: startOnAppStart
 			},
-			displays: []
+			displays: [{
+				description: displayText,
+				name: "Display #1",
+			}]
 		};
 		var parser = configSchema.safeParse(config);
 
@@ -92,7 +96,6 @@ export const Settings = () => {
 			}
 			<StartAppOnOSLoginSelect />
 			<StartSendingOnAppStartSelect />
-			<MaxTextLengthSelect />
 			<RefreshRateSelect />
 			<CommunicationProtocolSelect />
 			{protocol === "COM" ?

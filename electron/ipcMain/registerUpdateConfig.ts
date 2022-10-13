@@ -3,14 +3,17 @@ import { RegisterIpc } from ".";
 import { Config } from "../../src/sharedTypes/configSchema";
 import { configService } from "../ConfigService";
 import { logger } from '../Logger';
+import { appService } from '../AppService';
 
 export const registerUpdateConfig: RegisterIpc = (ipcMain) => {
-	ipcMain.handle('update-config', (event, newConfig: Config) => {
+	ipcMain.handle('update-config', async (event, newConfig: Config) => {
 		try {
 			const parser = configSchema.safeParse(newConfig)
 			if (parser.success) {
 				logger.debug("updateConfig: got valid config.")
-				return configService.updateConfig(newConfig)
+				const savedConfig = await configService.updateConfig(newConfig)
+				await appService.Restart();
+				return savedConfig
 			}
 			logger.debug("updateConfig: config is invalid")
 			return parser.error.issues.map(issue => issue.message);
