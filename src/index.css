@@ -39,6 +39,14 @@ pre {
 	height: 100%;
 }
 
+.w-full {
+	width: 100%;
+}
+
+.d-block {
+	display: block;
+}
+
 .homepage {
 	height: calc(100vh - 72px);
     justify-content: center;

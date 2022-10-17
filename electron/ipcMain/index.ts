@@ -8,6 +8,7 @@ import { registerUpdateConfig } from './registerUpdateConfig';
 import { registerGetIP } from './registerGetIP';
 import { registerOpenHelpWindow } from './registerOpenHelpWindow';
 import { registerIsSending } from './registerIsSending';
+import { registerGetDebugPaths } from './registerGetPaths';
 
 export type RegisterIpc = (ipcMain: Electron.IpcMain, m: BrowserWindow) => void
 
@@ -20,7 +21,8 @@ const toRegister: RegisterIpc[] = [
 	registerGetIP,
 	registerOpenHelpWindow,
 	registerIsSending,
-	registerStopSending
+	registerStopSending,
+	registerGetDebugPaths
 ]
 
 export const registerIpc = (mainWindow: BrowserWindow) => {

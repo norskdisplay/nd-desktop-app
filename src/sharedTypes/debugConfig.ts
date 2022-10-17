@@ -1,0 +1,1 @@
+export type DebugConfigPathsResponse = {name: string, path: string}[]

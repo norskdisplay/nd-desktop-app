@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const NoMatch = () => (
 	<>
-		<Typography variant="h3" gutterBottom>
+		<Typography variant="h6" gutterBottom>
 			404 Not found
 		</Typography>
 		<Link to="/">Back to home page</Link>

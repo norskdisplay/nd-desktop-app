@@ -18,6 +18,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
+import BugIcon from '@mui/icons-material/BugReport';
 import * as React from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import { useAtomValue } from "jotai";
@@ -93,6 +94,14 @@ export const Layout = () => {
 									<SettingsIcon />
 								</ListItemIcon>
 								<ListItemText primary="Configuration" />
+							</ListItemButton>
+						</ListItem>
+						<ListItem disablePadding>
+							<ListItemButton onClick={() => navigate("debug")}>
+								<ListItemIcon>
+									<BugIcon />
+								</ListItemIcon>
+								<ListItemText primary="Debug" />
 							</ListItemButton>
 						</ListItem>
 					</List>
