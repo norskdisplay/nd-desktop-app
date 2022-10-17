@@ -8,6 +8,10 @@ class AppService {
 	private app: Electron.App | null = null
 	private communicationsController = new CommunicationController()
 
+	public get isRunning() {
+		return this.communicationsController.isRunning
+	}
+
 	/**
 	 * Should only be called with a valid configuration
 	 */
@@ -64,8 +68,10 @@ class AppService {
 	}
 
 	public async Restart() {
+		const config = await configService.getConfig()
 		await this.Stop()
-		await this.requestStart()
+		this.startService(config)
+		this.registerAppStartupPreference(config)
 	}
 
 	public async Start(app: Electron.App) {

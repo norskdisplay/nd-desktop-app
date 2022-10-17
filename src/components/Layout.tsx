@@ -23,7 +23,6 @@ import { useNavigate, Outlet } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { configErrorAtom } from "../atoms/configErrorAtom";
 import { ConfigErrorModal } from "./ConfigErrorModal";
-import { useEffect } from "react";
 
 const darkTheme = createTheme({
 	palette: {
@@ -35,14 +34,6 @@ export const Layout = () => {
 	const navigate = useNavigate();
 	const [isOpen, setIsOpen] = React.useState(false);
 	const isError = useAtomValue(configErrorAtom)
-
-	useEffect(() => {
-		setTimeout(() => {
-			console.log("Running navigate")
-			navigate("/")
-		}, 10)
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
 
 	const close = () => {
 		setIsOpen(false);

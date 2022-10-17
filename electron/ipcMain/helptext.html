@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="shortcut icon" href="./favicon.ico" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<link rel="apple-touch-icon" sizes="180x180" href="../static/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../static/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../static/favicon-16x16.png">
+	<link rel="mask-icon" href="../static/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#b91d47">
+	<meta name="theme-color" content="#ffffff">
+	<meta name="description" content="Desktop app for Norsk Display" />
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'" />
+	<link rel="manifest" href="./manifest.json" />
+	<title>Norsk Display</title>
+	<style>
+		.mb-1 {
+			margin-bottom: 1em;
+		}
+
+		.pre {
+			background-color: #999;
+			color: black;
+			border-radius: 2px;
+			padding: 4px;
+		}
+
+		.inline-block {
+			display: inline-block;
+		}
+	</style>
+</head>
+
+<body style="background-color:#121212"><noscript>You need to enable JavaScript to run this app.</noscript>
+	<div style="padding-top: 1em;"><h2>Variables in display text</h2><div class="mb-1"><pre class="inline-block">$$</pre> will print a <pre class="inline-block">$</pre></div><div class="mb-1"><pre class="inline-block">$h</pre> will print the full date and time in format YYYY/mm/dd hh:mm</div><div class="mb-1"><pre class="inline-block">$s</pre> will print the second</div><div class="mb-1"><pre class="inline-block">$m</pre> will print minute</div><div class="mb-1"><pre class="inline-block">$Y</pre> will print the current year (4 digits)</div><div class="mb-1"><pre class="inline-block">$M</pre> will print the name of the current month</div><div class="mb-1"><pre class="inline-block">$D</pre> will print the name of the current day</div></div>
+</body>
+
+</html>

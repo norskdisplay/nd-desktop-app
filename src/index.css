@@ -27,10 +27,21 @@ pre {
 	margin-bottom: 1em;
 }
 
+.mb-2 {
+	margin-bottom: 2em;
+}
+
 .overflow-auto {
 	overflow: auto;
 }
 
 .h-full {
 	height: 100%;
+}
+
+.homepage {
+	height: calc(100vh - 72px);
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
 }

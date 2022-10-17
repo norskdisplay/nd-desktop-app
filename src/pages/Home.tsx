@@ -1,14 +1,17 @@
 import Button from "@mui/material/Button";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useState } from "react";
-import { communicationProtocolAtom, comPortAtom, databitAtom, ipAddressAtom, networkMaskAtom, parityAtom, tcpPortAtom, refreshRateAtom, startSendingOnAppStartAtom, stopBitAtom, startAppOnOSLoginAtom, displayTextAtom, baduRateAtom } from "../atoms";
+import { communicationProtocolAtom, comPortAtom, databitAtom, isSendingAtom, ipAddressAtom, networkMaskAtom, parityAtom, tcpPortAtom, refreshRateAtom, startSendingOnAppStartAtom, stopBitAtom, startAppOnOSLoginAtom, displayTextAtom, baduRateAtom } from "../atoms";
 import { DisplayTextSelect } from "../components/DisplayTextSelect";
 import { PreviewDisplayText } from "../components/PreviewDisplayText";
 import { COMConfig, comConfigSchema } from "../sharedTypes/comConfig";
 import { Config, configSchema } from "../sharedTypes/configSchema";
 import { TCPConfig, tcpConfigSchema } from "../sharedTypes/tcpConfig";
+import { delay } from "../utils/delay";
 
 export const Home = () => {
+	const [text, setText] = useState("")
+	const [isSaving, setIsSaving] = useState(false)
 	const [errors, setErrors] = useState<string[]>([]);
 	const dataBits = useAtomValue(databitAtom)
 	const parity = useAtomValue(parityAtom)
@@ -21,8 +24,25 @@ export const Home = () => {
 	const ip = useAtomValue(ipAddressAtom)
 	const networkMask = useAtomValue(networkMaskAtom)
 	const tcpPort = useAtomValue(tcpPortAtom)
-	const displayText = useAtomValue(displayTextAtom)
+	const [displayText, setDisplayText] = useAtom(displayTextAtom)
 	const baduRate = useAtomValue(baduRateAtom)
+	const [isSending, setIsSending] = useAtom(isSendingAtom)
+
+	const submit = async () => {
+		if (text === "") return
+		try {
+			setIsSaving(true)
+			await Promise.all([save(), delay(1000)])
+			setIsSending(true)
+			setDisplayText(text)
+		} catch (e) {
+			if (e instanceof Error) {
+				setErrors([e.message])
+			}
+		} finally {
+			setIsSaving(false)
+		}
+	}
 
 	const save = async () => {
 		setErrors([])
@@ -52,7 +72,7 @@ export const Home = () => {
 				startSendingOnAppStart: startOnAppStart
 			},
 			displays: [{
-				description: displayText,
+				description: text,
 				name: "Display #1",
 			}]
 		};
@@ -73,11 +93,27 @@ export const Home = () => {
 			})
 		}
 	}
+
+	const stop = async () => {
+		try {
+			await window.ipcRenderer.invoke("stop-sending");
+			setIsSending(false)
+		} catch (e) {
+
+		}
+	}
 	return (
-		<>
-			<DisplayTextSelect />
-			<PreviewDisplayText />
-			<Button variant="contained" color="success" onClick={save}>Save</Button>
-		</>
+		<div className="homepage">
+			<div className="mb-2">
+				<DisplayTextSelect onChange={(t) => setText(t)} />
+				<Button variant="contained" color="success" disabled={isSaving} onClick={submit}>{isSaving ? "Saving..." : "Save"}</Button>
+			</div>
+			{isSending && 
+				<>
+					<PreviewDisplayText />
+					<Button onClick={stop}>Stop sending</Button>
+				</>
+			}
+		</div>
 	)
 }

@@ -1,17 +1,16 @@
 import { useSetAtom } from "jotai"
 import { useEffect, useState } from "react"
 import { Config, configSchema } from "../sharedTypes/configSchema"
-import { communicationProtocolAtom, comPortAtom, configErrorAtom, databitAtom, displayTextAtom, ipAddressAtom, networkMaskAtom, parityAtom, refreshRateAtom, startAppOnOSLoginAtom, startSendingOnAppStartAtom, stopBitAtom, tcpPortAtom } from "../atoms";
+import { communicationProtocolAtom, comPortAtom, configErrorAtom, databitAtom, displayTextAtom, ipAddressAtom, isSendingAtom, networkMaskAtom, parityAtom, refreshRateAtom, startAppOnOSLoginAtom, startSendingOnAppStartAtom, stopBitAtom, tcpPortAtom } from "../atoms";
 
 export const useUpdatedConfig = () => {
-	console.log("RUNNING UPDATE CONFIG HOOK")
 	const [ isLoading, setIsLoading ] = useState(true)
 	const setDataBits = useSetAtom(databitAtom)
 	const setParity = useSetAtom(parityAtom)
 	const setStopBits = useSetAtom(stopBitAtom)
 	const setProtocol = useSetAtom(communicationProtocolAtom)
 	const setStartOnOsLogin = useSetAtom(startAppOnOSLoginAtom)
-	const setStartOnAppStart = useSetAtom(startSendingOnAppStartAtom)
+	const setStartSendingOnAppStart = useSetAtom(startSendingOnAppStartAtom)
 	const setRefreshRate = useSetAtom(refreshRateAtom)
 	const setComPort = useSetAtom(comPortAtom)
 	const setIp = useSetAtom(ipAddressAtom)
@@ -19,6 +18,7 @@ export const useUpdatedConfig = () => {
 	const setTcpPort = useSetAtom(tcpPortAtom)
 	const setDisplayText = useSetAtom(displayTextAtom)
 	const setConfigError = useSetAtom(configErrorAtom)
+	const setIsRunning = useSetAtom(isSendingAtom)
 
 	const loadConfig = () => {
 		setConfigError(false)
@@ -40,8 +40,9 @@ export const useUpdatedConfig = () => {
 					setTcpPort(tcpConfig.port)
 				}
 				setRefreshRate(config.out.refreshRate)
-				setStartOnAppStart(config.user.startAppOnOSLogin)
-				setStartOnOsLogin(config.user.startSendingOnAppStart)
+				setStartSendingOnAppStart(config.user.startSendingOnAppStart)
+				setIsRunning(config.user.startSendingOnAppStart)
+				setStartOnOsLogin(config.user.startAppOnOSLogin)
 				if (config.displays.length) {
 					setDisplayText(config.displays[0].description)
 				}

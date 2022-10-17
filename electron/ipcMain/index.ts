@@ -1,3 +1,4 @@
+import { registerStopSending } from './registerStopSending';
 import { registerInitialConfigStatus } from './registerInitialConfigStatus';
 import { BrowserWindow, ipcMain } from "electron";
 import { registerGetConfig } from "./registerGetConfig";
@@ -5,6 +6,8 @@ import { registerSerialPortCommunication } from "./registerSerialPortCommunicati
 import { registerUploadDownloadConfig } from "./registerUploadDownloadConfig";
 import { registerUpdateConfig } from './registerUpdateConfig';
 import { registerGetIP } from './registerGetIP';
+import { registerOpenHelpWindow } from './registerOpenHelpWindow';
+import { registerIsSending } from './registerIsSending';
 
 export type RegisterIpc = (ipcMain: Electron.IpcMain, m: BrowserWindow) => void
 
@@ -14,7 +17,10 @@ const toRegister: RegisterIpc[] = [
 	registerSerialPortCommunication,
 	registerInitialConfigStatus,
 	registerUpdateConfig,
-	registerGetIP
+	registerGetIP,
+	registerOpenHelpWindow,
+	registerIsSending,
+	registerStopSending
 ]
 
 export const registerIpc = (mainWindow: BrowserWindow) => {
