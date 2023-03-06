@@ -9,7 +9,10 @@ export const HelpTextContent = () => (
 			<pre className="inline-block">$$</pre> will print a <pre className="inline-block">$</pre>
 		</div>
 		<div className="mb-1">
-			<pre className="inline-block">$h</pre> will print the full date and time in format YYYY/mm/dd hh:mm
+			<pre className="inline-block">$full</pre> will print the full date and time in format YYYY/mm/dd hh:mm
+		</div>
+		<div className="mb-1">
+			<pre className="inline-block">$h</pre> will print the hour
 		</div>
 		<div className="mb-1">
 			<pre className="inline-block">$s</pre> will print the second

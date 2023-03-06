@@ -10,6 +10,8 @@ Start: `npm start`
 Build: `npm run build`
 
 ## Build and Package
+1) Run `npm run electron:build` to build the frontend, copy required files and build the electron app
+2) `.exe` file can be found withing the `dist` folder when task successfully completes
 `npm run package`
 Use RC Edit to rename and brand the application: https://github.com/electron/rcedit
 
