@@ -52,7 +52,7 @@
 		"@types/electron-devtools-installer": "^2.2.2",
 		"@types/jest": "^29.0.3",
 		"@types/node": "^18.7.20",
-		"@types/react": "^18.0.21",
+		"@types/react": "^18.0.32",
 		"@types/react-dom": "^18.0.6",
 		"electron-devtools-installer": "^3.2.0",
 		"electron-reload": "^1.5.0",
