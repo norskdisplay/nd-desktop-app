@@ -34,7 +34,7 @@
 		"@types/js-yaml": "^4.0.5",
 		"@types/serialport": "^8.0.2",
 		"@types/validator": "^13.7.7",
-		"concurrently": "^7.4.0",
+		"concurrently": "^9.0.1",
 		"cross-env": "^7.0.3",
 		"electron": "^20.2.0",
 		"electron-builder": "^23.3.3",
