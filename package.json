@@ -38,7 +38,7 @@
 		"cross-env": "^7.0.3",
 		"electron": "^20.2.0",
 		"electron-builder": "^23.3.3",
-		"wait-on": "^6.0.1"
+		"wait-on": "^8.0.1"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.10.4",
