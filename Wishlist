@@ -10,6 +10,7 @@ Oppsett: Hvert skilt: nummerert fra 1 til max (4    alt ,8 16?)
                       Address_group: 0..99 desimal
                       Address_unit: 0..99 desimal
                       Send (Y/N)
+                      Spesielt: Kan ENTER ved innskriving tolkes som "Send"? (problem: fler-linje-skilt...)
                       Read (Y/N)  will read incoming data to correct address (G,U) or 0,0 or unaddressed
                       Send field: text or command as before
                       Read field: text coming from sign, stripped from STX, CR, address
