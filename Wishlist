@@ -9,12 +9,19 @@ Oppsett: Hvert skilt: nummerert fra 1 til max (4    alt ,8 16?)
                       Name: fritekst, max 30 tegn?
                       Address_group: 0..99 desimal
                       Address_unit: 0..99 desimal
-                      Send (Y/N)
+                      Send (Y/N) hvor ofte (ikke pri: kan være forskjellig?)
                       Spesielt: Kan ENTER ved innskriving tolkes som "Send"? (problem: fler-linje-skilt...)
                       Read (Y/N)  will read incoming data to correct address (G,U) or 0,0 or unaddressed
-                      Send field: text or command as before
+                      Send field: text or command as before; lagres for bruk neste oppstart.
                       Read field: text coming from sign, stripped from STX, CR, address
+                      Skal bare Send og/eller Read vises på skjerm?
 ØNSKE:  Å finne en måte å scanne/finne alle tilgjengelige skilt på bussen, liste dem i en oversikt...
         For COM-portene: sende request til adresse 0,1 til 99,99
         For Ethernet er jeg mer i tvil om hvordan...
+
+Et problem: hver bruker må laste sin versjon. Finnes det måter å unngå dette?
+(rapportert at gammel bruker som ikke avslutter vil blokkere sending for nestemann. Kanskje
+kan ikke aktive brukere stenges ned? eller andre måter å omgå problemet på)
+
+
 
