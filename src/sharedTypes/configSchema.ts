@@ -1,6 +1,7 @@
 import { z } from "zod";
+import isIp from 'validator/lib/isIP';
 import { comConfigSchema } from "./comConfig";
-import { tcpConfigSchema } from "./tcpConfig";
+import { isNetworkMask } from "./tcpConfig";
 import { userConfigSchema } from "./userConfig";
 
 export const communicationProtocolEnum = z.enum(["COM", "TCP"]);
@@ -12,7 +13,6 @@ export type RefreshRateType = z.infer<typeof refreshRateSchema>
 export const outConfigSchema = z.object({
 	refreshRate: refreshRateSchema,
 	protocol: communicationProtocolEnum,
-	tcpConfig: tcpConfigSchema.nullable(),
 	comConfig: comConfigSchema.nullable()
 }).refine((args) => {
 	if (args.protocol !== "COM") return true;
@@ -20,12 +20,6 @@ export const outConfigSchema = z.object({
 }, {
 	message: "COM config is required",
 	path: ["comConfig"]
-}).refine((args) => {
-	if (args.protocol !== "TCP") return true;
-	return args.tcpConfig != null;
-}, {
-	message: "TCP config is required",
-	path: ["tcpConfig"]
 })
 
 export type OutConfig = z.infer<typeof outConfigSchema>
@@ -34,6 +28,7 @@ export const displayTypeEnum = z.enum(["numeric", "alphanumeric", "graphic"]);
 export type DispayTypeEnumType = z.infer<typeof displayTypeEnum>
 
 export const displayConfigSchema = z.object({
+	id: z.string(),
 	/** if shared com port, use address to disiuish  */
 	address: z.number().min(0).max(99).optional(),
 	/**
@@ -50,11 +45,17 @@ export const displayConfigSchema = z.object({
 	 * Ledetekst - foran editeringstekst står det en tekst
 	 * "Silo 1"
 	 */
-	description: z.string(),
+	description: z.string().optional(),
 	/**
 	 * Name of display, used to identify display in UI
 	 */
-	name: z.string()
+	name: z.string(),
+	ip: z.string().refine(isIp, "This does not look like a valid IP address.").optional(),
+	networkMask: z.string().refine(isNetworkMask, "This does not look like a valid network mask").optional(),
+	port: z.number().min(0).max(65535).optional(),
+	// TODO are these required?
+	addressGroup: z.number().min(0).max(255),
+	addressUnit: z.number().min(0).max(255)
 })
 
 export type DisplayConfig = z.infer<typeof displayConfigSchema>
@@ -64,5 +65,9 @@ export const configSchema = z.object({
 	user: userConfigSchema,
 	displays: z.array(displayConfigSchema)
 })
+// .refine((args) => {
+// 	if (args.out.protocol !== "TCP") return true;
+// 	return !args.displays.some(x => !x.ip || x.port == null)
+// }, { message: "CUSTOM VALUDATION DID NOT PASS"})
 
 export type Config = z.infer<typeof configSchema>

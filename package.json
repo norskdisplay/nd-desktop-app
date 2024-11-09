@@ -15,8 +15,6 @@
 		"eject": "react-scripts eject",
 		"copy:buildfiles": "node ./buildscripts/copyFilesPublicToBuild.js",
 		"build:compileelectron": "tsc --project ./tsconfig.electron.json",
-		"build:old": "npx rimraf ./dist && npm run validate:defaultconfig && npm run build:compileelectron && npm run build:webcomponents && npm run build:styles && npm run insert:styles",
-		"validate:defaultconfig": "tsc ./scripts/validateDefaultConfig.ts && node ./scripts/validateDefaultConfig.js",
 		"dev": "concurrently \"npm:watch:styles\" \"npm:watch:webcomponents\" \"npm:watch\"",
 		"lint": "eslint -c .eslintrc --ext .ts ./src",
 		"package": "electron-forge package",
@@ -33,6 +31,7 @@
 		"@electron-forge/maker-zip": "^6.0.0-beta.63",
 		"@types/js-yaml": "^4.0.5",
 		"@types/serialport": "^8.0.2",
+		"@types/uuid": "^10.0.0",
 		"@types/validator": "^13.7.7",
 		"concurrently": "^7.4.0",
 		"cross-env": "^7.0.3",
@@ -54,6 +53,7 @@
 		"@types/node": "^18.7.20",
 		"@types/react": "^18.0.21",
 		"@types/react-dom": "^18.0.6",
+		"dotenv": "^16.4.5",
 		"electron-devtools-installer": "^3.2.0",
 		"electron-reload": "^1.5.0",
 		"electron-squirrel-startup": "^1.0.0",
@@ -62,10 +62,12 @@
 		"js-yaml": "^4.1.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"react-hook-form": "^7.52.1",
 		"react-router-dom": "^6.4.1",
 		"react-scripts": "5.0.1",
 		"serialport": "^10.2.2",
 		"typescript": "^4.8.3",
+		"uuid": "^10.0.0",
 		"validator": "^13.7.0",
 		"web-vitals": "^3.0.2",
 		"zod": "^3.19.1"
@@ -79,6 +81,9 @@
 		],
 		"directories": {
 			"buildResources": "assets"
+		},
+		"win": {
+			"icon": "build/icon.ico"
 		}
 	},
 	"browserslist": {

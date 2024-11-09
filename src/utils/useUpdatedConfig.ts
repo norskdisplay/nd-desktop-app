@@ -1,9 +1,14 @@
 import { useSetAtom } from "jotai"
 import { useEffect, useState } from "react"
 import { Config, configSchema } from "../sharedTypes/configSchema"
-import { communicationProtocolAtom, comPortAtom, configErrorAtom, databitAtom, displayTextAtom, ipAddressAtom, isSendingAtom, networkMaskAtom, parityAtom, refreshRateAtom, startAppOnOSLoginAtom, startSendingOnAppStartAtom, stopBitAtom, tcpPortAtom } from "../atoms";
+import { communicationProtocolAtom, comPortAtom, configErrorAtom, databitAtom, displayConfigListAtom, isSendingAtom, parityAtom, refreshRateAtom, startAppOnOSLoginAtom, startSendingOnAppStartAtom, stopBitAtom } from "../atoms";
 
-export const useUpdatedConfig = () => {
+type UseUpdateConfig = {
+	isLoading: boolean
+	reload: () => void
+}
+
+export const useUpdatedConfig = (): UseUpdateConfig => {
 	const [ isLoading, setIsLoading ] = useState(true)
 	const setDataBits = useSetAtom(databitAtom)
 	const setParity = useSetAtom(parityAtom)
@@ -13,12 +18,9 @@ export const useUpdatedConfig = () => {
 	const setStartSendingOnAppStart = useSetAtom(startSendingOnAppStartAtom)
 	const setRefreshRate = useSetAtom(refreshRateAtom)
 	const setComPort = useSetAtom(comPortAtom)
-	const setIp = useSetAtom(ipAddressAtom)
-	const setNetworkMask = useSetAtom(networkMaskAtom)
-	const setTcpPort = useSetAtom(tcpPortAtom)
-	const setDisplayText = useSetAtom(displayTextAtom)
 	const setConfigError = useSetAtom(configErrorAtom)
 	const setIsRunning = useSetAtom(isSendingAtom)
+	const setDisplayConfigList = useSetAtom(displayConfigListAtom)
 
 	const loadConfig = () => {
 		setConfigError(false)
@@ -33,19 +35,11 @@ export const useUpdatedConfig = () => {
 					setComPort(comConfig.port)
 				}
 				setProtocol(config.out.protocol)
-				if (config.out.tcpConfig) {
-					const { tcpConfig } = config.out
-					setIp(tcpConfig.ip)
-					setNetworkMask(tcpConfig.networkMask)
-					setTcpPort(tcpConfig.port)
-				}
 				setRefreshRate(config.out.refreshRate)
 				setStartSendingOnAppStart(config.user.startSendingOnAppStart)
 				setIsRunning(config.user.startSendingOnAppStart)
 				setStartOnOsLogin(config.user.startAppOnOSLogin)
-				if (config.displays.length) {
-					setDisplayText(config.displays[0].description)
-				}
+				setDisplayConfigList(config.displays)
 			}
 		}).finally(() => {
 			setIsLoading(false)
@@ -60,7 +54,11 @@ export const useUpdatedConfig = () => {
 	
 	useEffect(() => {
 		loadConfig()
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 	
-	return isLoading
+	return {
+		isLoading, 
+		reload: loadConfig
+	}
 }

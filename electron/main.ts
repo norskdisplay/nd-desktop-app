@@ -5,11 +5,6 @@ import { logger } from "./Logger";
 import { registerIpc } from "./ipcMain";
 import { appService } from "./AppService";
 
-/**
-"TypeError: Cannot read property 'indexOf' of undefined": 
-https://stackoverflow.com/questions/59231294/typeerror-cannot-read-property-indexof-of-undefined-raised-when-using-packa
- */
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
 	// eslint-disable-line global-require

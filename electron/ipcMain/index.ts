@@ -9,6 +9,7 @@ import { registerGetIP } from './registerGetIP';
 import { registerOpenHelpWindow } from './registerOpenHelpWindow';
 import { registerIsSending } from './registerIsSending';
 import { registerGetDebugPaths } from './registerGetPaths';
+import { registerStartSending } from './registerStartSending';
 
 export type RegisterIpc = (ipcMain: Electron.IpcMain, m: BrowserWindow) => void
 
@@ -22,7 +23,8 @@ const toRegister: RegisterIpc[] = [
 	registerOpenHelpWindow,
 	registerIsSending,
 	registerStopSending,
-	registerGetDebugPaths
+	registerGetDebugPaths,
+	registerStartSending,
 ]
 
 export const registerIpc = (mainWindow: BrowserWindow) => {

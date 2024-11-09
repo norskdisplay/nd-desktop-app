@@ -1,17 +1,22 @@
-import { TCPConfig } from './../../src/sharedTypes/tcpConfig';
 import { COMConfig } from '../../src/sharedTypes/comConfig'
-import { RefreshRateType } from '../../src/sharedTypes/configSchema';
+import { DisplayConfig, RefreshRateType } from '../../src/sharedTypes/configSchema';
 
 export type SerialPortControllerConfig =  {
 	protocol: "COM",
-	text: string,
+	texts: string[],
 	config: null | COMConfig & { refreshRate: RefreshRateType }
+}
+
+export type DisplayConnection = {
+	text: string
+	ip: string
+	port: number
 }
 
 export type TcpControllerConfig = {
 	protocol: "TCP",
-	text: string,
-	config: null | TCPConfig & { refreshRate: RefreshRateType }
+	displays: DisplayConfig[]
+	config: { refreshRate: RefreshRateType }
 }
 
 export type CommunicationConfigType = SerialPortControllerConfig | TcpControllerConfig

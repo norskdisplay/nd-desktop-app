@@ -21,7 +21,7 @@ class AppService {
 			logger.debug("no displays config, aborting service start")
 			return
 		}
-		const text = displays[0].description
+		const texts = displays.map(x => x.description).filter(x => x !== undefined && x != null) as string[]
 
 		if (out.protocol === "COM") {
 			if (out.comConfig == null) {
@@ -30,7 +30,7 @@ class AppService {
 			}
 			const comConfig: SerialPortControllerConfig = {
 				protocol: out.protocol,
-				text,
+				texts,
 				config: {
 					...out.comConfig,
 					refreshRate: out.refreshRate
@@ -41,15 +41,11 @@ class AppService {
 			return
 		}
 		if (out.protocol === "TCP") {
-			if (out.tcpConfig == null) {
-				logger.debug("TCP Config is null, do not start service")
-				return
-			}
+			const displayData = displays.filter(x => x.ip && x.port !== undefined);
 			const tcpConfig: TcpControllerConfig = {
 				protocol: out.protocol,
-				text,
+				displays: displayData,
 				config: {
-					...out.tcpConfig,
 					refreshRate: out.refreshRate
 				}
 			}
@@ -83,7 +79,9 @@ class AppService {
 				this.startService(config)
 			}
 			this.registerAppStartupPreference(config)
+			return
 		}
+		logger.error("Could not start service, config was not valid")
 	}
 
 	public async requestStart() {

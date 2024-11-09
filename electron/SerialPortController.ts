@@ -24,7 +24,7 @@ export class SerialPortController {
 		})
 	}
 	public start(config: SerialPortControllerConfig) {
-		if (config.config == null) return; // Should nebver be null here
+		if (config.config == null) return; // Should never be null here
 		const { port, dataBits, stopBits, baudRate } = config.config
 		this.port = "COM" + port
 		this.serPorInst = new SerialPort({
@@ -47,22 +47,28 @@ export class SerialPortController {
 			error: this.error
 		}
 	}
-	public write = (text: string) => new Promise<void>((res, rej) => {
+	public write = (texts: string[]) => new Promise<void>((res, rej) => {
 		if (this.hasError) {
 			return rej(this.error)
 		}
-		if (typeof text !== "string") {
-			return rej("Text must be of type string. Received " + typeof text)
+		if (!Array.isArray(texts)) {
+			return rej("Text must be an array of strings. Received " + typeof texts)
 		}
 		if (!this.serPorInst.isOpen) {
 			return rej("Port "+ this.port + " is not open")
 		}
-		this.serPorInst.write(Buffer.from(text), (err?: Error) => {
-			if (err) {
-				return rej(err.message)
-			}
-			return res()
+		const errorMessages: string[] = []
+		texts.forEach((text) => {
+			this.serPorInst.write(Buffer.from(text), (err?: Error) => {
+				if (err) {
+					errorMessages.push(err.message)
+				}
+			})
 		})
+		if (errorMessages.length) {
+			rej(errorMessages)
+		}
+		res()
 	})
 	public close = () => new Promise<void>((res) => {
 		if (this.serPorInst.isOpen) {

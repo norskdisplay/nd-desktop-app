@@ -1,6 +1,5 @@
 import { Atom } from "jotai"
 
-// todo: FIX, not working
 export const createInitialValues = () => {
 	const initialValues: Set<readonly [Atom<unknown>, unknown]> = new Set();
 	const get = () => initialValues

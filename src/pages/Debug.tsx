@@ -7,8 +7,8 @@ export const Debug = () => {
 	useEffect(() => {
 		window.ipcRenderer.invoke("get-debug-paths").then((data: DebugConfigPathsResponse) => {
 			setPaths(data)
-		}).catch(() => {
-
+		}).catch((err) => {
+			console.error(err)
 		})
 	}, [])
 	return (

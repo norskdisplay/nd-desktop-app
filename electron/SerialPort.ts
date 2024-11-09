@@ -26,7 +26,7 @@ class SerialPort {
 		if (config.config == null) return // should nevner happen
 		this.serialConnection = new SerialPortController()
 		this.serialConnection.start(config)
-		this.writeInterval(config.text, config.config.refreshRate)
+		this.writeInterval(config.texts, config.config.refreshRate)
 	}
 
 	public async stop() {
@@ -54,13 +54,13 @@ class SerialPort {
 		this.writeFailedCount = 0
 	}
 
-	async write(text: string) {
+	async write(texts: string[]) {
 		try {
 			if (!this.serialConnection) {
 				logger.error("No serial connection instance exist")
 				throw new Error("No serial connection instance exist")
 			}
-			await this.serialConnection.write(text)
+			await this.serialConnection.write(texts)
 		} catch (e) {
 			this.writeFailedCount += 1
 			if (this.writeFailedCount > 3) {
@@ -69,10 +69,9 @@ class SerialPort {
 		}
 	}
 	
-	writeInterval = async (rawText: string, ms = 10) => {
+	writeInterval = async (rawTexts: string[], ms = 10) => {
 		this.intervalRef = setInterval(() => {
-			const text = withAscii(includeMergeFields(rawText))
-			this.write(text)
+			this.write(rawTexts.map(t => withAscii(includeMergeFields(t))))
 		}, ms)
 	}
 }
