@@ -3,7 +3,7 @@ import { app } from "electron"
 
 // https://stackoverflow.com/questions/8393636/configure-node-js-to-log-to-a-file-instead-of-the-console/33898010#33898010
 class Logger {
-	path = app.getPath("logs") + "/nd-desktop.log"
+	path = app.getPath("logs") + "\\nd-desktop.log"
 	logStream = createWriteStream(this.path, { flags: "a" })
 	isDevMode = !app.isPackaged
 

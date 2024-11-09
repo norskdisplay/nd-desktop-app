@@ -10,7 +10,10 @@ const padded = (input: string | number) => {
 	return ("0" + input).slice(-2);
 }
 
-export const includeMergeFields = (str: string) => {
+export const includeMergeFields = (str?: string): string => {
+	if (!str) {
+		return "";
+	}
 	const date = new Date(Date.now())
 	if (typeof str != "string") throw new Error("Argument is not of type string. Received " + typeof str)
 	return str

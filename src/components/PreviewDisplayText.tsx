@@ -1,13 +1,12 @@
 import Alert from "@mui/material/Alert"
 import { useAtomValue } from "jotai"
 import { useEffect, useState } from "react"
-import { displayTextAtom, refreshRateAtom } from "../atoms"
+import { refreshRateAtom } from "../atoms"
 import { replaceText } from "../utils/replaceText"
 
 const handleReplaceText = replaceText()
 
-export const PreviewDisplayText = () => {
-	const text = useAtomValue(displayTextAtom)
+export const PreviewDisplayText = ({ text }: { text: string }) => {
 	const refreshRate = useAtomValue(refreshRateAtom)
 	const [textCurrent, setTextCurrent] = useState(handleReplaceText(text))
 	
@@ -25,7 +24,7 @@ export const PreviewDisplayText = () => {
 	return (
 		<>
 			<Alert icon={false} variant="outlined" severity="info" className="mb-1">
-				<div style={{ fontSize: "1em", fontWeight: "bold", marginBottom: "0.5em" }}>Text on sign:</div>
+				<div style={{ fontSize: "1em", fontWeight: "bold", marginBottom: "0.5em" }}>Preview:</div>
 				{textCurrent}
 			</Alert>
 		</>

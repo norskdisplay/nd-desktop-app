@@ -2,8 +2,8 @@ import { Config } from "../src/sharedTypes/configSchema";
 
 export const defaultConfig: Config = {
 	out: {
-		refreshRate: 500,
-		protocol: "COM",
+		refreshRate: 1000,
+		protocol: "TCP",
 		comConfig: {
 			port: 0,
 			baudRate: 9600,
@@ -12,11 +12,10 @@ export const defaultConfig: Config = {
 			parity: "none",
 			stopBits: "1",
 		},
-		tcpConfig: null
 	},
 	user: {
 		startAppOnOSLogin: false,
-		startSendingOnAppStart: false
+		startSendingOnAppStart: true
 	},
 	displays: []
 }

@@ -11,24 +11,33 @@ export const RefreshRateSelect = () => {
 	const [error, setError] = useState("")
 
 	const handleRefreshRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = parseInt(e.target.value, 10)
-		let isValid = true
-		if (isNaN(value)) {
-			setError("Refresh rate must me a number")
-			isValid = false
-		}
-		if (value < 100) {
-			setError("Refresh rate minimum is 100")
-			isValid = false
-		}
-		if (value > 10000) {
-			setError("Refresh rate maximum is 10 000")
-			isValid = false
-		}
-		setValue(value);
-		if (isValid) {
-			setError("")
-			setRefreshRate(value)
+		try {
+			if (e.target.value !== "0" && !e.target.value) throw new Error();
+			const value = parseInt(e.target.value, 10)
+			let isValid = true
+			const minValue = 100
+			const maxValue = 10000
+			if (isNaN(value)) {
+				setError("Refresh rate must me a number")
+				isValid = false
+			}
+
+			if (value < minValue) {
+				setError("Refresh rate minimum is 100")
+				isValid = false
+			}
+			if (value > maxValue) {
+				setError("Refresh rate maximum is 10 000")
+				isValid = false
+			}
+			setValue(value);
+			if (isValid) {
+				setError("")
+				setRefreshRate(value)
+			}
+		} catch {
+			setValue(0)
+			setError("Refresh rate must be a number")
 		}
 	}
 
@@ -39,6 +48,7 @@ export const RefreshRateSelect = () => {
 				label="Refresh rate (milliseconds)"
 				variant="standard"
 				value={value}
+				error={!!error}
 				onChange={handleRefreshRateChange}
 				type="number"
 			/>

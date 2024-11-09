@@ -48,8 +48,13 @@ pre {
 }
 
 .homepage {
-	height: calc(100vh - 72px);
     justify-content: center;
     display: flex;
     flex-direction: column;
+}
+
+.display-list {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
 }

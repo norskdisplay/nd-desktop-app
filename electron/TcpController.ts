@@ -3,57 +3,124 @@ import { Socket } from "net"
 import { logger } from "./Logger";
 import { includeMergeFields } from "../src/utils/replaceText";
 import { withAscii } from "./utils/withAscii";
+import { DisplayConfig } from "../src/sharedTypes/configSchema";
 
 export class TcpController {
-	private config: TcpControllerConfig | null = null
 	private refreshRate: number = 0
 	intervalRef: NodeJS.Timeout | null = null
-	private socket: Socket | null = null
+	private socketsMap: {
+		[name: string]: DisplayConfig & {
+			retries: 0
+			socket: Socket
+			text: string
+		}
+	} = {}
 
-	private startWrite(str: string) {
-		if (this.socket == null) return
+	private startWrite() {
+		if (this.socketsMap == null) return
 		
 		this.intervalRef = setInterval(() => {
-			if (this.socket != null) {
-				var textToWrite = withAscii(includeMergeFields(str))
-				this.socket.write(textToWrite)
-			}
+			Object.values(this.socketsMap).filter(entry => typeof entry.text === "string" && entry.text !== "").forEach((entry) => {
+				var textToWrite = withAscii(includeMergeFields(entry.text))
+				entry.socket.write(textToWrite)
+			})
 		}, this.refreshRate)
 	}
 
-	private registerErrorHandler() {
-		if (this.socket == null) return
-		this.socket.on("error", (err) => {
-			logger.debug("Socket error occured. Error: " + err.message)
+	// private registerErrorHandlers() {
+	// 	if (this.socketsMap == null) return
+	// 	// TODO FIND OUT WHY NODE PROCESS DIES ON ETIMEOUT BEFORE RETRY
+	// 	Object.entries(this.socketsMap).forEach(([key, value]) => {
+	// 		value.socket.on("error", (err) => {
+	// 			logger.error(`Socket error occured for ${key}. Error:` + err.message)
+				
+	// 			var code = (err as any).code
+	// 			if (err.message.includes("ETIMEDOUT") || (code && code.includes("ETIMEDOUT"))) {
+	// 				this.restartSocket(key)
+	// 			}
+	// 		})
+	// 	})
+	// }
+
+	private registerErrorHandlerOnSocket(key: string, socket: Socket) {
+		socket.on("error", (err) => {
+			logger.error(`Socket error occured for ${key}. Error:` + err.message)
 			
-			if (err.message.includes("ETIMEDOUT")) {
-				this.stop()
-				if (this.config == null) return
-				this.start(this.config)
+			var code = (err as any).code
+			if (err.message.includes("ETIMEDOUT") || (code && code.includes("ETIMEDOUT"))) {
+				this.restartSocket(key)
+			}
+		})
+	}
+
+	private getSocketMapKey(d: DisplayConfig) {
+		return `${d.description ?? ""}_${d.ip}:${d.port}`
+	}
+
+	private createAndConnectSocket(key: string, ip: string, port: number): Socket {
+		const socket = new Socket()
+		this.registerErrorHandlerOnSocket(key, socket)
+		socket.connect({ port: port, host: ip })
+		return socket
+	}
+
+	private setupConnections(displays: DisplayConfig[]) {
+		// TODO validate config before starting
+		displays.forEach((display) => {
+			const socketMapKey = this.getSocketMapKey(display)
+			const socket = this.createAndConnectSocket(socketMapKey, display.ip!, display.port!)
+			this.socketsMap[socketMapKey] = {
+				socket,
+				retries: 0,
+				text: display.description!,
+				...display
 			}
 		})
 	}
 	
 	public start(config: TcpControllerConfig) {
 		if (config.config == null) return // Should not happen
-		this.config = config
 		this.refreshRate = config.config.refreshRate
-		this.socket = new Socket()
-		this.socket.connect({ port: config.config.port, host: config.config.ip })
-		logger.debug("Trying to connect to socket with config " + JSON.stringify({ port: config.config.port, host: config.config.ip }))
-		this.registerErrorHandler()
-		this.startWrite(config.text)
+		logger.debug("Trying to connect to socket with config " + JSON.stringify(config))
+		this.setupConnections(config.displays)
+		this.startWrite()
 	}
+
+	public restartSocket(key: string) {
+		const hasKey = key in this.socketsMap
+		if (!hasKey) {
+			logger.error("Expected "+key+" in socket map but was not found")
+			return
+		}
+
+		const entry = this.socketsMap[key]
+		if (entry.retries > 5) {
+			logger.error(`Retries for connection with key ${key} and ip ${entry.ip} and port ${entry.port} failed after ${entry.retries} retries`)
+			delete this.socketsMap[key]
+			return
+		}
+
+		this.destroySocket(entry.socket)
+		const newSocket = this.createAndConnectSocket(key, entry.ip!, entry.port!)
+		entry.socket = newSocket
+		entry.retries += 1
+	}
+
+	private destroySocket(socket: Socket){
+		socket.removeAllListeners()
+		socket.destroy()
+	}
+
 	public stop() {
+		// stop 
 		if (this.intervalRef) {
 			clearInterval(this.intervalRef)
 			this.intervalRef = null
 		}
-		if (this.socket != null) {
-			this.socket.removeAllListeners()
-			this.socket.destroy()
-			this.socket = null
-		}
+		if (this.socketsMap == null) return;
+		Object.values(this.socketsMap).forEach((entry) => {
+			this.destroySocket(entry.socket)
+		})
 	}
 }
 
